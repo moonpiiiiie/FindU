@@ -11,6 +11,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MapsActivity" />
+
+    <Spinner
+        android:id="@+id/spinnerMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="50dp"
+        android:background="@color/white"
+        android:contentDescription="@string/maptype"
+        android:dropDownWidth="match_parent"
+        android:tooltipText="@string/maptype"
+        map:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="1.0"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="@+id/map"
+        map:layout_constraintVertical_bias="0.026" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="0dp"

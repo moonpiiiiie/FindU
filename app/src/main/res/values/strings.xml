@@ -7,4 +7,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="profile">Profile</string>
+    <string name="maptype">Map Type</string>
+    <string-array name="mapType">
+        <item>Normal</item>
+        <item>Satellite</item>
+        <item>Terrain</item>
+    </string-array>
 </resources>
