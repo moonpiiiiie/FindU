@@ -64,7 +64,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(binding.getRoot());
 
 
-        getLocationPermission();
+//        getLocationPermission();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -76,7 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Create a new PlacesClient instance
         PlacesClient placesClient = Places.createClient(this);
 
-        Places.initialize(getApplicationContext(), BuildConfig.MAPS_API_KEY);
+
 
         // set bottom navigation connection
         bottomNav = findViewById(R.id.bottom_nav);
@@ -152,7 +152,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Kyiv"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
-        getLocationPermission();
+//        getLocationPermission();
 
     }
 
@@ -164,26 +164,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (itemSelected.equals("Normal")) {
             Log.v("map type select", itemSelected);
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        }
-        else if (itemSelected.equals("Satellite")) {
+        } else if (itemSelected.equals("Satellite")) {
             Log.v("map type select", itemSelected);
             mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        }
-        else if (itemSelected.equals("Terrain")) {
+        } else if (itemSelected.equals("Terrain")) {
             Log.v("map type select", itemSelected);
 
-        if (itemSelected.equals("Normal")) {
-            Log.v("maptype select", itemSelected);
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        }
-        else if (itemSelected.equals("Satellite")) {
-            Log.v("maptype select", itemSelected);
-            mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        }
-        else if (itemSelected.equals("Terrain")) {
-            Log.v("maptype select", itemSelected);
+            if (itemSelected.equals("Normal")) {
+                Log.v("maptype select", itemSelected);
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            } else if (itemSelected.equals("Satellite")) {
+                Log.v("maptype select", itemSelected);
+                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            } else if (itemSelected.equals("Terrain")) {
+                Log.v("maptype select", itemSelected);
 
-            mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+            }
         }
     }
 
@@ -194,16 +191,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
          * onRequestPermissionsResult.
          */
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                ACCESS_FINE_LOCATION)
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
-
                 == PackageManager.PERMISSION_GRANTED) {
             locationPermissionGranted = true;
         } else {
             ActivityCompat.requestPermissions(this,
-                    new String[]{ACCESS_FINE_LOCATION},
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, ACCESS_BACKGROUND_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
+
 }
