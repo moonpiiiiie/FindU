@@ -15,17 +15,28 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import com.google.android.libraries.places.api.Places;
@@ -43,6 +54,8 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,12 +64,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     BottomNavigationView bottomNav;
-
-    //user set map type
     Spinner spinner_mapType;
+
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     private boolean locationPermissionGranted;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+
+    private EditText editText_search;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +93,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Places.initialize(getApplicationContext(), BuildConfig.MAPS_API_KEY);
         // Create a new PlacesClient instance
         PlacesClient placesClient = Places.createClient(this);
+
+        editText_search = findViewById(R.id.editText_search);
+        editText_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH || i == EditorInfo.IME_ACTION_DONE || keyEvent.getAction() == KeyEvent.ACTION_DOWN || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
+                    // search for geolocation
+                    geoLocate();
+                }
+                return false;
+            }
+        });
 
 
 
@@ -140,6 +168,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
+
 //        // Use fields to define the data types to return.
 //        List<Place.Field> placeFields = Collections.singletonList(Place.Field.NAME);
 //
@@ -170,6 +199,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    private void geoLocate() {
+        String searchString = editText_search.getText().toString();
+
+        Geocoder geocoder = new Geocoder(MapsActivity.this);
+        List<Address> addressList = new ArrayList<>();
+        try {
+            addressList = geocoder.getFromLocationName(searchString, 1);
+        } catch (IOException e) {
+            Log.e("Map Activity ", "IOException: " + e);
+        }
+        if (addressList.size() > 0) {
+            Address address = addressList.get(0);
+            LatLng add = new LatLng(address.getLatitude(), address.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(add));
+            MarkerOptions options = new MarkerOptions().position(add).title(searchString);
+            mMap.addMarker(options);
+        }
+    }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -183,17 +231,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 //
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(50.450992306749434, 30.51388704315086);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Kyiv"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
+        // Add a marker in Kyiv and move the camera
+//        LatLng Kyiv = new LatLng(50.450992306749434, 30.51388704315086);
+//        mMap.addMarker(new MarkerOptions().position(Kyiv).title("Marker in Kyiv"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(Kyiv));
+//
         getLocationPermission();
+
+        // enable current location
+        if (locationPermissionGranted) {
+            getCurrentLocation();
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        }
     }
 
 
 
-
+    private void getCurrentLocation() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        try {
+            if (locationPermissionGranted) {
+                final Task location = fusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            Location currentLocation = (Location) task.getResult();
+                            LatLng cur = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(cur));
+                        } else {
+                            Toast.makeText(MapsActivity.this, "unable to get location", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException e) {
+            Log.e("Map activity", e.getMessage());
+        }
+    }
 
 
     private void getLocationPermission() {

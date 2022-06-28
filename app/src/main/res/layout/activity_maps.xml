@@ -16,9 +16,8 @@
         android:id="@+id/spinnerMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
         android:background="@color/white"
         android:contentDescription="@string/maptype"
         android:dropDownWidth="match_parent"
@@ -30,6 +29,39 @@
         map:layout_constraintTop_toTopOf="@+id/map"
         map:layout_constraintVertical_bias="0.026" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/white"
+        android:elevation="10dp"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageview_search"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_baseline_search_24" />
+
+        <EditText
+            android:id="@+id/editText_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/imageview_search"
+            android:hint="Enter Address, City or Zip Code"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:imeOptions="actionSearch"/>
+
+
+    </RelativeLayout>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="0dp"
