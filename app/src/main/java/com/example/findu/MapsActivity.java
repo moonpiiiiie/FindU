@@ -18,16 +18,19 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,6 +75,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     private EditText editText_search;
+    private ImageView imageview_locateMe;
+    // TODO 1: Search works on emulator not physical device
+    // TODO 2: keyboard new line overwrite
+    // TODO 3: locate me button works on physical device not emulator
+    // TODO 4: x Remove former marker
 
 
     @Override
@@ -95,18 +103,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         PlacesClient placesClient = Places.createClient(this);
 
         editText_search = findViewById(R.id.editText_search);
-        editText_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        imageview_locateMe = findViewById(R.id.imageview_locateMe);
+        imageview_locateMe.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_SEARCH || i == EditorInfo.IME_ACTION_DONE || keyEvent.getAction() == KeyEvent.ACTION_DOWN || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
-                    // search for geolocation
-                    geoLocate();
-                }
-                return false;
+            public void onClick(View view) {
+                getCurrentLocation();
             }
         });
-
-
 
         // set bottom navigation connection
         bottomNav = findViewById(R.id.bottom_nav);
@@ -210,12 +213,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e("Map Activity ", "IOException: " + e);
         }
         if (addressList.size() > 0) {
+            mMap.clear();
             Address address = addressList.get(0);
             LatLng add = new LatLng(address.getLatitude(), address.getLongitude());
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(add));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(add, 10));
             MarkerOptions options = new MarkerOptions().position(add).title(searchString);
             mMap.addMarker(options);
         }
+        hideSoftKeyBoard();
     }
 
     /**
@@ -244,6 +249,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
+        editText_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH || i == EditorInfo.IME_ACTION_DONE || keyEvent.getAction() == KeyEvent.ACTION_DOWN || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
+                    // search for geolocation
+                    geoLocate();
+                    hideSoftKeyBoard();
+                }
+                return false;
+            }
+        });
     }
 
 
@@ -259,7 +275,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         if (task.isSuccessful()) {
                             Location currentLocation = (Location) task.getResult();
                             LatLng cur = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLng(cur));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cur, 12));
                         } else {
                             Toast.makeText(MapsActivity.this, "unable to get location", Toast.LENGTH_SHORT).show();
                         }
@@ -292,5 +308,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+    }
+
+    private void hideSoftKeyBoard(){
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 }
