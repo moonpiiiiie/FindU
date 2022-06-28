@@ -5,6 +5,7 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -16,6 +17,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -103,6 +105,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, precision);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_mapType.setAdapter(arrayAdapter);
+        // set spinner for different map type
+        spinner_mapType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String itemSelected = adapterView.getItemAtPosition(i).toString();
+                if (itemSelected.equals("Normal")) {
+                    Log.v("map type select", itemSelected);
+                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                } else if (itemSelected.equals("Satellite")) {
+                    Log.v("map type select", itemSelected);
+                    mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                } else if (itemSelected.equals("Terrain")) {
+                    Log.v("map type select", itemSelected);
+
+                    if (itemSelected.equals("Normal")) {
+                        Log.v("maptype select", itemSelected);
+                        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    } else if (itemSelected.equals("Satellite")) {
+                        Log.v("maptype select", itemSelected);
+                        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                    } else if (itemSelected.equals("Terrain")) {
+                        Log.v("maptype select", itemSelected);
+
+                        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
 //        // Use fields to define the data types to return.
 //        List<Place.Field> placeFields = Collections.singletonList(Place.Field.NAME);
@@ -156,33 +192,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        String itemSelected = adapterView.getItemAtPosition(i).toString();
-        Toast.makeText(this, itemSelected, Toast.LENGTH_SHORT).show();
 
-        if (itemSelected.equals("Normal")) {
-            Log.v("map type select", itemSelected);
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        } else if (itemSelected.equals("Satellite")) {
-            Log.v("map type select", itemSelected);
-            mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        } else if (itemSelected.equals("Terrain")) {
-            Log.v("map type select", itemSelected);
 
-            if (itemSelected.equals("Normal")) {
-                Log.v("maptype select", itemSelected);
-                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            } else if (itemSelected.equals("Satellite")) {
-                Log.v("maptype select", itemSelected);
-                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-            } else if (itemSelected.equals("Terrain")) {
-                Log.v("maptype select", itemSelected);
 
-                mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-            }
-        }
-    }
+
 
     private void getLocationPermission() {
         /*
@@ -201,4 +214,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
 }
