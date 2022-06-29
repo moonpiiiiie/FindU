@@ -16,19 +16,70 @@
         android:id="@+id/spinnerMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
         android:background="@color/white"
         android:contentDescription="@string/maptype"
         android:dropDownWidth="match_parent"
         android:tooltipText="@string/maptype"
         map:layout_constraintBottom_toTopOf="@+id/bottom_nav"
         map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="1.0"
+        map:layout_constraintHorizontal_bias="0.12"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="@+id/map"
         map:layout_constraintVertical_bias="0.026" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/white"
+        android:elevation="10dp"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageview_search"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_baseline_search_24"
+            />
+
+        <EditText
+            android:id="@+id/editText_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/imageview_search"
+            android:hint="Enter Address, City or Zip Code"
+            android:imeOptions="actionSearch"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/imageview_locateMe"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="16dp"
+        map:layout_constraintBottom_toTopOf="@+id/map"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="0.954"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+        map:layout_constraintVertical_bias="0.007"
+        android:src="@drawable/ic_baseline_gps_fixed_32"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
