@@ -27,6 +27,7 @@ public class FirestoreAPI {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                     }
                 })
+
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {

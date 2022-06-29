@@ -13,11 +13,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNav;
+
 
 
     @Override
@@ -32,20 +35,20 @@ public class MainActivity extends AppCompatActivity {
         Button btn = findViewById(R.id.btn_submit);
 
         /** getText **/
-        DaoPerson dao = new DaoPerson();
+        //DaoPerson dao = new DaoPerson();
+        FirestoreAPI db = new FirestoreAPI();
         btn.setOnClickListener(v->
-        {
-//            Person ppl = new Person(edit_name.getText().toString(), edit_location.getText().toString(), edit_contact.getText().toString());
-//            dao.add(ppl).addOnSuccessListener(suc ->{
-//                Toast.makeText(this, "Record is inserted", Toast.LENGTH_SHORT).show();
-//
-//            }).addOnFailureListener(er -> {
-//                Toast.makeText(this, "" + er.getMessage(), Toast.LENGTH_LONG).show();
-//            });
-            HashMap<String, Object> hashMap = new HashMap<>();
-            hashMap.put("name", edit_name.getText().toString());
-            hashMap.put("location", edit_location.getText().toString());
-            hashMap.put("contact", edit_contact.getText().toString());
+        {   String name =  edit_name.getText().toString();
+            String location = edit_location.getText().toString();
+            String contact = edit_contact.getText().toString();
+
+            Map<String, Object> userInfo = new HashMap<String, Object>();
+            userInfo.put("name", name);
+            userInfo.put("location", location);
+            userInfo.put("contact", contact);
+            db.writePost(userInfo);
+            System.out.println(userInfo);
+
 
         });
 
