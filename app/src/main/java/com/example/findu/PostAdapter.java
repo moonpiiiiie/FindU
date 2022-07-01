@@ -33,7 +33,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         Post post = posts.get(i);
         viewHolder.name.setText(post.getName());
         viewHolder.age.setText(String.valueOf(post.getAge()));
-        viewHolder.gender.setText(post.getGender());
+
 
     }
 

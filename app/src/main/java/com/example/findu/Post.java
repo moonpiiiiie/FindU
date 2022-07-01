@@ -3,13 +3,12 @@ package com.example.findu;
 public class Post {
     private String name;
     private int age;
-    private String gender;
+
     private String notes;
 
-    public Post(String name, int age, String gender, String notes) {
+    public Post(String name, int age, String notes) {
         this.name = name;
         this.age = age;
-        this.gender = gender;
         this.notes = notes;
     }
     public String getName() {
@@ -28,13 +27,7 @@ public class Post {
         this.age = age;
     }
 
-    public String getGender() {
-        return gender;
-    }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
 
     public String getNotes() {
         return notes;
