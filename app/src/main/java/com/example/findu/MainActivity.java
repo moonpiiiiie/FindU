@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
     //test
     ArrayList<Post> posts;
 
+    private FirebaseAuth firebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
 
         recyclerView = findViewById(R.id.recyclerView_post);
 
+        firebaseAuth = FirebaseAuth.getInstance();
 
         // test post data
         posts = new ArrayList<>();
@@ -96,5 +101,16 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
     public void openAddPostDialog(View view) {
         AddPost postDialog = new AddPost();
         postDialog.show(getSupportFragmentManager(), "add post");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        // Check to see if the user is currently signed in.
+        if (currentUser == null) {
+            startActivity(new Intent(MainActivity.this, EmailPasswordActivity.class));
+            finish();
+        }
     }
 }
