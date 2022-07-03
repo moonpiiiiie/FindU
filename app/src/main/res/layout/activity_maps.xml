@@ -60,6 +60,8 @@
             android:hint="Enter Address, City or Zip Code"
             android:imeOptions="actionSearch"
             android:textColor="@color/black"
+            android:maxLines="1"
+            android:inputType="text"
             android:textSize="15sp" />
 
 

@@ -76,9 +76,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private EditText editText_search;
     private ImageView imageview_locateMe;
-    // TODO 1: Search works on emulator not physical device
-    // TODO 2: keyboard new line overwrite
-    // TODO 3: locate me button works on physical device not emulator
+    // TODO 1: x Search works on emulator not physical device
+    // TODO 2: x keyboard new line overwrite
+    // TODO 3: x locate me button works on physical device not emulator
     // TODO 4: x Remove former marker
 
 
@@ -103,6 +103,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         PlacesClient placesClient = Places.createClient(this);
 
         editText_search = findViewById(R.id.editText_search);
+//        editText_search.setImeOptions(EditorInfo.IME_ACTION_GO);
         imageview_locateMe = findViewById(R.id.imageview_locateMe);
         imageview_locateMe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,37 +170,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
-
-
-
-//        // Use fields to define the data types to return.
-//        List<Place.Field> placeFields = Collections.singletonList(Place.Field.NAME);
-//
-//// Use the builder to create a FindCurrentPlaceRequest.
-//        FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
-//
-//
-//// Call findCurrentPlace and handle the response (first check that the user has granted permission).
-//        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            @SuppressLint("MissingPermission") Task<FindCurrentPlaceResponse> placeResponse = placesClient.findCurrentPlace(request);
-//            placeResponse.addOnCompleteListener(task -> {
-//                if (task.isSuccessful()){
-//                    FindCurrentPlaceResponse response = task.getResult();
-//                    for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
-//                        Log.i(TAG, String.format("Place '%s' has likelihood: %f",
-//                                placeLikelihood.getPlace().getName(),
-//                                placeLikelihood.getLikelihood()));
-//                    }
-//                } else {
-//                    Exception exception = task.getException();
-//                    if (exception instanceof ApiException) {
-//                        ApiException apiException = (ApiException) exception;
-//                        Log.e(TAG, "Place not found: " + apiException.getStatusCode());
-//                    }
-//                }
-//            });
-//        }
-
     }
 
     private void geoLocate() {
@@ -232,6 +202,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -255,7 +226,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (i == EditorInfo.IME_ACTION_SEARCH || i == EditorInfo.IME_ACTION_DONE || keyEvent.getAction() == KeyEvent.ACTION_DOWN || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
                     // search for geolocation
                     geoLocate();
-                    hideSoftKeyBoard();
                 }
                 return false;
             }
@@ -268,7 +238,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         try {
             if (locationPermissionGranted) {
-                final Task location = fusedLocationProviderClient.getLastLocation();
+                @SuppressLint("MissingPermission") final Task location = fusedLocationProviderClient.getLastLocation();
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
