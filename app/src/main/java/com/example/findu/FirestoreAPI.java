@@ -19,6 +19,7 @@ public class FirestoreAPI {
     final static String TAG = "FirestoreApi";
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static CollectionReference postRef = db.collection("posts");
+
     public static void writePost(Map data) {
         postRef.add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

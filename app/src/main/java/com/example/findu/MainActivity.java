@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
             userInfo.put("name", name);
             userInfo.put("location", location);
             userInfo.put("contact", contact);
+
             db.writePost(userInfo);
             System.out.println(userInfo);
 
