@@ -19,9 +19,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sign Up"
+            android:textStyle="bold"
             android:gravity="center_horizontal"
-            android:textColor="@color/black"
-            android:textSize="50sp"
+            android:textColor="@color/blue_ukraine"
+            android:textSize="40sp"
             android:layout_marginTop="50dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -118,7 +119,7 @@
                 android:id="@+id/btnSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/black"
+                android:backgroundTint="@color/blue_ukraine"
                 android:paddingStart="20dp"
                 android:paddingTop="15dp"
                 android:paddingEnd="20dp"
@@ -148,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="Sign In"
-                android:textColor="@color/purple_200"
+                android:textColor="@color/blue_ukraine"
                 android:textSize="14sp" />
 
         </LinearLayout>
