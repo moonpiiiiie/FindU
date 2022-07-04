@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        getSupportActionBar().hide();
         recyclerView = findViewById(R.id.recyclerView_post);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -50,10 +50,11 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
         posts = new ArrayList<>();
         posts.add(new Post("Cheng Xue", 29, "San Jose"));
         posts.add(new Post("Emma Xue", 29, "San Jose"));
-        posts.add(new Post("Jikun Li", 29, "San Jose"));
-        posts.add(new Post("David Li", 29,  "San Jose"));
-        posts.add(new Post("Joyce Xu", 29,  "San Jose"));
-        posts.add(new Post("Jinru Xu", 29,  "San Jose"));
+        posts.add(new Post("Jikun Li", 17, "San Jose"));
+        posts.add(new Post("David Li", 13,  "San Jose"));
+        posts.add(new Post("Joyce Xu", 18,  "San Jose"));
+        posts.add(new Post("Jinru Xu", 12,  "San Jose"));
+        posts.add(new Post("Mingyue Wang", 16,  "San Jose"));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         postAdapter = new PostAdapter(this, posts);
         recyclerView.setAdapter(postAdapter);
@@ -62,7 +63,8 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
         addPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openAddPostDialog(view);
+//                openAddPostDialog(view);
+                startActivity(new Intent(view.getContext(), AddPostActivity.class));
             }
         });
 //        //spinner widget
