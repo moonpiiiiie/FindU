@@ -20,6 +20,7 @@ public class AddPost extends AppCompatDialogFragment {
     private EditText editText_notes;
     private Spinner spinner_gender;
     private PostDialogListener postDialogListener;
+    // TODO: add picture
 
     @NonNull
     @Override
