@@ -13,7 +13,7 @@
         <item>Satellite</item>
         <item>Terrain</item>
     </string-array>
-    <string-array name="gender">
+    <string-array name="gender_array">
         <item>male</item>
         <item>female</item>
         <item>other</item>
