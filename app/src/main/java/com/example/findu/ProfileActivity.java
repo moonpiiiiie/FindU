@@ -1,6 +1,8 @@
 package com.example.findu;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +17,8 @@ import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
     BottomNavigationView bottomNav;
+    RecyclerView profileRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,13 +40,20 @@ public class ProfileActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        profileRecyclerView = findViewById(R.id.recyclerview_profile);
+
+        String[] items = {"username", "settings"};
+        ProfileAdapter profileAdapter = new ProfileAdapter(this, items);
+        profileRecyclerView.setAdapter(profileAdapter);
+        profileRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    public void addOne(View v) {
-        EditText label = findViewById(R.id.add_label);
-        String x = label.getText().toString();
-        Map<String, Object> d = new HashMap<>();
-        d.put("testKey", x);
-        FirestoreAPI.writePost(d);
-    }
+//    public void addOne(View v) {
+//        EditText label = findViewById(R.id.add_label);
+//        String x = label.getText().toString();
+//        Map<String, Object> d = new HashMap<>();
+//        d.put("testKey", x);
+//        FirestoreAPI.writePost(d);
+//    }
 }

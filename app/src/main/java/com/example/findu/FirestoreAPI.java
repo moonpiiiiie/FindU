@@ -37,6 +37,7 @@ public class FirestoreAPI {
                 });
     }
 
+
     static void readPost(String id) {
         DocumentReference docRef = postRef.document(id);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

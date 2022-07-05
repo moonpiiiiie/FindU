@@ -13,4 +13,9 @@
         <item>Satellite</item>
         <item>Terrain</item>
     </string-array>
+    <string-array name="gender">
+        <item>male</item>
+        <item>female</item>
+        <item>other</item>
+    </string-array>
 </resources>
