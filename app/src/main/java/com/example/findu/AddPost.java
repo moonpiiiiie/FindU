@@ -73,7 +73,7 @@ public class AddPost extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        /**
+
 
                         postImg.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -81,7 +81,7 @@ public class AddPost extends AppCompatDialogFragment {
 
 
                             }
-                        }); **/
+                        });
 
 
 
