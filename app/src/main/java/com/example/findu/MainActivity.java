@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
 //        posts.add(new Post("Jinru Xu", 12,  "San Jose"));
 //        posts.add(new Post("Mingyue Wang", 16,  "San Jose"));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        postAdapter = new PostAdapter(this, posts, this);
+        postAdapter = new PostAdapter(MainActivity.this, posts, this);
         recyclerView.setAdapter(postAdapter);
 
 
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
     }
 
     private void EventChangeListener() {
-        db.collection("Users").orderBy("time", Query.Direction.ASCENDING)
+        db.collection("Users").orderBy("name", Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
