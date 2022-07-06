@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,7 +48,7 @@ public class AddPostActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private String currentUserId;
     private ImageView post_photo;
-    private Uri postImageUri;
+    private Uri postImageUri=null;
 
     ActivityResultLauncher<String> selectPhoto;
     @Override
@@ -88,6 +89,7 @@ public class AddPostActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 galleryResultLauncher.launch(gallery);
+                //StorageReference postRef = storageReference.child("post_photo").child(FieldValue.serverTimestamp().toString() + ".jpg");
 
 
 //                boolean pick = true;
@@ -138,7 +140,7 @@ public class AddPostActivity extends AppCompatActivity {
 
 
                 FirestoreAPI db = new FirestoreAPI();
-                if (!name.isEmpty() && !note.isEmpty() && postImageUri != null) {
+                if (!name.isEmpty() && !note.isEmpty() &&postImageUri!=null ) {
                     StorageReference postRef = storageReference.child("post_photo").child(FieldValue.serverTimestamp().toString() + ".jpg");
                     postRef.putFile(postImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -161,12 +163,14 @@ public class AddPostActivity extends AppCompatActivity {
                                 });
 
                             } else {
+                                Toast.makeText(AddPostActivity.this, task.getException().getMessage() , Toast.LENGTH_SHORT).show();
 
 
                             }
                         }
                     });
                 }else{
+                    Toast.makeText(AddPostActivity.this, "Please upload the image and write key information", Toast.LENGTH_SHORT).show();
 
                     }
                 /**
