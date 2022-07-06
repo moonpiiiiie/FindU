@@ -140,7 +140,7 @@ public class AddPostActivity extends AppCompatActivity {
 
 
                 FirestoreAPI db = new FirestoreAPI();
-                if (!name.isEmpty() && !note.isEmpty() &&postImageUri!=null ) {
+                if (!name.isEmpty() && !note.isEmpty()) {
                     StorageReference postRef = storageReference.child("post_photo").child(FieldValue.serverTimestamp().toString() + ".jpg");
                     postRef.putFile(postImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override

@@ -1,5 +1,7 @@
 package com.example.findu;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -20,17 +22,28 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements AddPost.PostDialogListener {
     BottomNavigationView bottomNav;
+    private FirebaseFirestore firestore;
 
     RecyclerView recyclerView;
     PostAdapter postAdapter;
 
     Spinner spinner_gender;
     FloatingActionButton addPost;
+    private Query query;
+    private ListenerRegistration listenerRegistration;
 
     //test
     ArrayList<Post> posts;
@@ -43,18 +56,21 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
         recyclerView = findViewById(R.id.recyclerView_post);
-
         firebaseAuth = FirebaseAuth.getInstance();
 
-        // test post data
+
+
+
         posts = new ArrayList<>();
+        /**
+          // test post data
         posts.add(new Post("Cheng Xue", 29, "San Jose"));
         posts.add(new Post("Emma Xue", 29, "San Jose"));
         posts.add(new Post("Jikun Li", 17, "San Jose"));
         posts.add(new Post("David Li", 13,  "San Jose"));
         posts.add(new Post("Joyce Xu", 18,  "San Jose"));
         posts.add(new Post("Jinru Xu", 12,  "San Jose"));
-        posts.add(new Post("Mingyue Wang", 16,  "San Jose"));
+        posts.add(new Post("Mingyue Wang", 16,  "San Jose")); **/
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         postAdapter = new PostAdapter(this, posts);
         recyclerView.setAdapter(postAdapter);
@@ -65,8 +81,38 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
             public void onClick(View view) {
 //                openAddPostDialog(view);
                 startActivity(new Intent(view.getContext(), AddPostActivity.class));
+
             }
         });
+        if(firebaseAuth.getCurrentUser()!= null){
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    Boolean isBottom = !recyclerView.canScrollVertically(1);
+                    if(isBottom)
+                        Toast.makeText(MainActivity.this, "Reached Bottom", Toast.LENGTH_SHORT).show();
+                }
+            });
+            query = firestore.collection("Posts").orderBy("time" , Query.Direction.DESCENDING);
+            listenerRegistration = query.addSnapshotListener(MainActivity.this, new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                    for (DocumentChange doc: value.getDocumentChanges()){
+                        if(doc.getType()==DocumentChange.Type.ADDED){
+                            Post post = doc.getDocument().toObject(Post.class);
+                            posts.add(post);
+                            postAdapter.notifyDataSetChanged();
+                        }else{
+                            postAdapter.notifyDataSetChanged();
+                        }
+                    }
+                    listenerRegistration.remove();
+
+                }
+            });
+
+        }
 //        //spinner widget
 //        spinner_gender = findViewById(R.id.spinner_gender);
 //        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.gender, android.R.layout.simple_spinner_item);

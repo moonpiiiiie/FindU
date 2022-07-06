@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -44,12 +45,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, age, gender;
+        ImageView postImage;
+        View postView;
 
         public ViewHolder(@NonNull View itemView) {
+
             super(itemView);
+            postView = itemView;
             name = itemView.findViewById(R.id.textView_name);
             age = itemView.findViewById(R.id.textView_age);
             gender = itemView.findViewById(R.id.textView_gender);
+        }
+        public void setPostImage(String urlPost){
+            //postImage = postView.findViewById(R.id.post)
         }
     }
 
