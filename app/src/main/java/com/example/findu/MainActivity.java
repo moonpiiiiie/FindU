@@ -1,5 +1,6 @@
 package com.example.findu;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -16,10 +17,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements AddPostActivity.PostListener, PostAdapter.OnPostListener{
+public class MainActivity extends AppCompatActivity implements PostAdapter.OnPostListener{
     BottomNavigationView bottomNav;
 
     RecyclerView recyclerView;
@@ -32,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements AddPostActivity.P
     ArrayList<Post> posts;
 
     private FirebaseAuth firebaseAuth;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +57,15 @@ public class MainActivity extends AppCompatActivity implements AddPostActivity.P
 //        posts.add(new Post("Jikun Li", 17, "San Jose"));
 //        posts.add(new Post("David Li", 13,  "San Jose"));
 //        posts.add(new Post("Joyce Xu", 18,  "San Jose"));
-        posts.add(new Post("Jinru Xu", 12,  "San Jose"));
-        posts.add(new Post("Mingyue Wang", 16,  "San Jose"));
+//        posts.add(new Post("Jinru Xu", 12,  "San Jose"));
+//        posts.add(new Post("Mingyue Wang", 16,  "San Jose"));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         postAdapter = new PostAdapter(this, posts, this);
         recyclerView.setAdapter(postAdapter);
+
+
+        db = FirebaseFirestore.getInstance();
+        EventChangeListener();
 
         addPost = findViewById(R.id.Button_addPost);
         addPost.setOnClickListener(new View.OnClickListener() {
@@ -87,13 +99,32 @@ public class MainActivity extends AppCompatActivity implements AddPostActivity.P
         });
     }
 
-    @Override
-    public void applyTexts(String name, int age, String notes) {
-        Post temp = new Post(name, age, notes);
-        posts.add(temp);
-        postAdapter.notifyItemInserted(posts.size()-1);
-        Toast.makeText(MainActivity.this, "post added successfully in PostActivity", Toast.LENGTH_SHORT).show();
+    private void EventChangeListener() {
+        db.collection("Users").orderBy("time", Query.Direction.ASCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.e("Firestore retriveing data error", error.getMessage());
+                            return;
+                        }
+                        for (DocumentChange dc: value.getDocumentChanges()) {
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
+                                posts.add(dc.getDocument().toObject(Post.class));
+                            }
+                            postAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
     }
+
+//    @Override
+//    public void applyTexts(String name, int age, String notes) {
+//        Post temp = new Post(name, age, notes);
+//        posts.add(temp);
+//        postAdapter.notifyItemInserted(posts.size()-1);
+//        Toast.makeText(MainActivity.this, "post added successfully in PostActivity", Toast.LENGTH_SHORT).show();
+//    }
 
 
     @Override
