@@ -93,28 +93,7 @@ public class AddPostActivity extends AppCompatActivity {
 
                 //StorageReference postRef = storageReference.child("post_photo").child(FieldValue.serverTimestamp().toString() + ".jpg");
 
-
-//                boolean pick = true;
-//                if (pick) {
-//                    if (!checkCameraPermission()) {
-//                        requestCameraPermission();
-//                    } else
-//                    {
-//                        pickImage();
-//                    }
-//                } else {
-//                    if (!checkGalleryPermission()) {
-//                        requestGalleryPermission();
-//                    } else
-//                    {
-//                        pickImage();
-//                    }
-//                }
             }
-
-
-
-
         });
 
 
@@ -160,7 +139,8 @@ public class AddPostActivity extends AppCompatActivity {
                                         userPost.put("note", note);
                                         userPost.put("time", FieldValue.serverTimestamp());
                                         db.writePost(userPost);
-
+                                        Toast.makeText(AddPostActivity.this, "Post added successfully!", Toast.LENGTH_SHORT).show();
+                                        finish();
                                     }
                                 });
 
@@ -230,4 +210,6 @@ public class AddPostActivity extends AppCompatActivity {
         boolean galleryPer = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         return cameraPer&&galleryPer;
     }
+
+
 }

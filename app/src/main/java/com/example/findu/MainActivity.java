@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -23,7 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements AddPost.PostDialogListener {
+public class MainActivity extends AppCompatActivity implements AddPost.PostDialogListener, PostAdapter.OnPostListener{
     BottomNavigationView bottomNav;
 
     RecyclerView recyclerView;
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
         posts.add(new Post("Jinru Xu", 12,  "San Jose"));
         posts.add(new Post("Mingyue Wang", 16,  "San Jose"));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        postAdapter = new PostAdapter(this, posts);
+        postAdapter = new PostAdapter(this, posts, this);
         recyclerView.setAdapter(postAdapter);
 
         addPost = findViewById(R.id.Button_addPost);
@@ -114,5 +116,13 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
             startActivity(new Intent(MainActivity.this, EmailPasswordActivity.class));
             finish();
         }
+    }
+
+    @Override
+    public void onPostClick(int position) {
+        Log.d("PostActivity", "onPostClicked");
+        Intent intent = new Intent(this, SinglePostActivity.class);
+        intent.putExtra("some", "something");
+        startActivity(intent);
     }
 }
