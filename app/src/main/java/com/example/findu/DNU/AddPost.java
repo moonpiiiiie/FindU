@@ -1,4 +1,4 @@
-package com.example.findu;
+package com.example.findu.DNU;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,11 +14,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.example.findu.R;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class AddPost extends AppCompatDialogFragment {
     private EditText editText_name;
     private EditText editText_age;
     private EditText editText_notes;
     private Spinner spinner_gender;
+
     private PostDialogListener postDialogListener;
     // TODO: add picture
 
@@ -40,12 +48,15 @@ public class AddPost extends AppCompatDialogFragment {
                     }
                 })
                 .setPositiveButton("Post", new DialogInterface.OnClickListener() {
+
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String name = editText_name.getText().toString();
                         int age = Integer.parseInt(editText_age.getText().toString());
                         String note = editText_notes.getText().toString();
+                        String gender = spinner_gender.toString();
                         // TODO: future change for firebase
+
                         postDialogListener.applyTexts(name, age, note);
                     }
                 });

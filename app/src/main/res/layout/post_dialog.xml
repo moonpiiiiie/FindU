@@ -54,6 +54,13 @@
     </LinearLayout>
 
 
+    <ImageView
+    android:layout_width = "match_parent"
+    android:layout_height = "250dp"
+    android:id = "@+id/post_image"
+    android:scaleType="centerCrop"
+    android:background="@drawable/add_post_pic"/>
+
     <EditText
         android:id="@+id/edittext_notes"
         android:layout_width="match_parent"
@@ -67,4 +74,6 @@
         android:minHeight="48dp"
         tools:ignore="TextContrastCheck"
         android:autofillHints="" />
+
+
 </LinearLayout>

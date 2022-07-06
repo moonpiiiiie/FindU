@@ -18,6 +18,7 @@ import java.util.Map;
 public class ProfileActivity extends AppCompatActivity {
     BottomNavigationView bottomNav;
     RecyclerView profileRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

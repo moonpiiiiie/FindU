@@ -19,6 +19,7 @@ public class FirestoreAPI {
     final static String TAG = "FirestoreApi";
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static CollectionReference postRef = db.collection("posts");
+
     public static void writePost(Map data) {
         postRef.add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -27,6 +28,7 @@ public class FirestoreAPI {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                     }
                 })
+
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -34,6 +36,7 @@ public class FirestoreAPI {
                     }
                 });
     }
+
 
     static void readPost(String id) {
         DocumentReference docRef = postRef.document(id);
