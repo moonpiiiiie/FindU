@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -49,6 +50,8 @@ public class AddPostActivity extends AppCompatActivity {
     private String currentUserId;
     private ImageView post_photo;
     private Uri postImageUri=null;
+//    private PostListener postListener;
+//    Context context;
 
     ActivityResultLauncher<String> selectPhoto;
     @Override
@@ -58,6 +61,9 @@ public class AddPostActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
         currentUserId = auth.getCurrentUser().getUid();
+
+//        context = getApplicationContext();
+//        postListener = (PostListener) context;
 
         setContentView(R.layout.activity_add_post);
 
@@ -139,6 +145,7 @@ public class AddPostActivity extends AppCompatActivity {
                                         userPost.put("note", note);
                                         userPost.put("time", FieldValue.serverTimestamp());
                                         db.writePost(userPost);
+
                                         Toast.makeText(AddPostActivity.this, "Post added successfully!", Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
@@ -153,7 +160,6 @@ public class AddPostActivity extends AppCompatActivity {
                     });
                 }else{
                     Toast.makeText(AddPostActivity.this, "Please upload the image and write key information", Toast.LENGTH_SHORT).show();
-
                     }
                 /**
 
@@ -188,10 +194,11 @@ public class AddPostActivity extends AppCompatActivity {
 
     }
 
-//    private void pickImage() {
-//        return;
-//    }
-//
+    public interface PostListener {
+        void applyTexts(String name, int age, String notes);
+    }
+
+
     private void requestGalleryPermission() {
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
     }
@@ -201,15 +208,15 @@ public class AddPostActivity extends AppCompatActivity {
         return galleryPer;
     }
 
-    private void requestCameraPermission() {
-        requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
-    }
-
-    private boolean checkCameraPermission() {
-        boolean cameraPer = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
-        boolean galleryPer = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-        return cameraPer&&galleryPer;
-    }
+//    private void requestCameraPermission() {
+//        requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+//    }
+//
+//    private boolean checkCameraPermission() {
+//        boolean cameraPer = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+//        boolean galleryPer = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+//        return cameraPer&&galleryPer;
+//    }
 
 
 }
