@@ -25,14 +25,13 @@
             android:id="@+id/post_photo"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:src="@drawable/ic_baseline_photo_library_24"
-            />
+            android:src="@drawable/ic_baseline_photo_library_24" />
 
-        <Button
-            android:id="@+id/button_uploadPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="upload"/>
+        <!--        <Button-->
+        <!--            android:id="@+id/button_uploadPhoto"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="upload"/>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,11 +95,16 @@
 
     </LinearLayout>
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</RelativeLayout>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/button_cancel"
