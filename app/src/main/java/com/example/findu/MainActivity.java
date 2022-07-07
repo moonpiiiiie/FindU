@@ -1,33 +1,37 @@
 package com.example.findu;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.View;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements PostAdapter.OnPostListener{
+public class MainActivity extends AppCompatActivity implements PostAdapter.OnPostListener {
     BottomNavigationView bottomNav;
 
     RecyclerView recyclerView;
@@ -36,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
     Spinner spinner_gender;
     FloatingActionButton addPost;
 
-    //test
     ArrayList<Post> posts;
 
     private FirebaseAuth firebaseAuth;
@@ -48,26 +51,31 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+
+        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.swiperefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                posts.clear();
+                fetchPosts();
+                pullToRefresh.setRefreshing(false);
+            }
+        });
+
         recyclerView = findViewById(R.id.recyclerView_post);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
         // test post data
         posts = new ArrayList<>();
-//        posts.add(new Post("Cheng Xue", 29, "San Jose"));
-//        posts.add(new Post("Emma Xue", 29, "San Jose"));
-//        posts.add(new Post("Jikun Li", 17, "San Jose"));
-//        posts.add(new Post("David Li", 13,  "San Jose"));
-//        posts.add(new Post("Joyce Xu", 18,  "San Jose"));
-//        posts.add(new Post("Jinru Xu", 12,  "San Jose"));
-//        posts.add(new Post("Mingyue Wang", 16,  "San Jose"));
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         postAdapter = new PostAdapter(MainActivity.this, posts, this);
         recyclerView.setAdapter(postAdapter);
-
-
         db = FirebaseFirestore.getInstance();
-        EventChangeListener();
+
+        fetchPosts();
+//        EventChangeListener();
 
         addPost = findViewById(R.id.Button_addPost);
         addPost.setOnClickListener(new View.OnClickListener() {
@@ -88,13 +96,13 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
             switch (item.getItemId()) {
                 case R.id.map_nav_button:
                     startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                     return true;
                 case R.id.post_nav_button:
                     return true;
                 case R.id.profile_nav_button:
                     startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                     return true;
             }
             return false;
@@ -110,10 +118,9 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
                             Log.e("Firestore retrieve data error", error.getMessage());
                             return;
                         }
-                        for (DocumentChange dc: value.getDocumentChanges()) {
+                        for (DocumentChange dc : value.getDocumentChanges()) {
                             if (dc.getType() == DocumentChange.Type.ADDED) {
-//                                posts.add(dc.getDocument().toObject(Post.class));
-                                Log.d("doc", dc.getDocument().toString());
+                                posts.add(dc.getDocument().toObject(Post.class));
                             }
                             postAdapter.notifyDataSetChanged();
                         }
@@ -121,6 +128,26 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
                 });
     }
 
+    private void fetchPosts() {
+        CollectionReference postRef = db.collection("posts");
+        String TAG = "FirestoreApi";
+        postRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot x = task.getResult();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        posts.add(document.toObject(Post.class));
+                        postAdapter.notifyDataSetChanged();
+//                        Log.d(TAG, document.getId() + " => " + document.getData());
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+    }
 //    @Override
 //    public void applyTexts(String name, int age, String notes) {
 //        Post temp = new Post(name, age, notes);
@@ -135,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
         Log.d("PostActivity", "onPostClicked");
         Intent intent = new Intent(this, SinglePostActivity.class);
         String tmpName = posts.get(position).getName();
-        String tmpNotes = posts.get(position).getNotes();
+        String tmpNotes = posts.get(position).getNote();
         intent.putExtra("name", tmpName);
         intent.putExtra("note", tmpNotes);
         startActivity(intent);

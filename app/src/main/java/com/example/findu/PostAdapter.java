@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,7 +36,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
         Post post = posts.get(i);
         viewHolder.name.setText(post.getName());
         viewHolder.age.setText(String.valueOf(post.getAge()));
-        viewHolder.note.setText(post.getNotes());
+        viewHolder.note.setText(post.getNote());
         // TODO viewHolder.photo
 
 
