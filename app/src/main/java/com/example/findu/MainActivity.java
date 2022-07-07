@@ -13,7 +13,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -69,12 +72,36 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
         // test post data
         posts = new ArrayList<>();
 
+
+
+
+
+        fetchPosts();
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         postAdapter = new PostAdapter(MainActivity.this, posts, this);
         recyclerView.setAdapter(postAdapter);
         db = FirebaseFirestore.getInstance();
 
-        fetchPosts();
+
+
+
+
+        ImageView searchView = findViewById(R.id.imageview_search);
+        EditText searchText = (EditText)findViewById(R.id.editText_search) ;
+
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String searchInput = searchText.getText().toString();
+                searchByName(searchInput);
+
+
+            }
+        });
+
+
 //        EventChangeListener();
 
         addPost = findViewById(R.id.Button_addPost);
@@ -128,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
                 });
     }
 
+
     private void fetchPosts() {
         CollectionReference postRef = db.collection("posts");
         String TAG = "FirestoreApi";
@@ -159,5 +187,29 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
         intent.putExtra("name", tmpName);
         intent.putExtra("note", tmpNotes);
         startActivity(intent);
+    }
+
+    private void searchByName(String searchInput){
+
+        ArrayList<Post> filteredPost = new ArrayList<>();
+
+        for (Post item: posts){
+            if(item.getName().toLowerCase().contains(searchInput.toLowerCase())){
+
+                filteredPost.add(item);
+                Toast.makeText(this, "Find possible matches", Toast.LENGTH_SHORT).show();
+            }
+        }
+        if (filteredPost.isEmpty()){
+            Toast.makeText(this, "No Data Found", Toast.LENGTH_SHORT).show();
+        }else{
+            //Toast.makeText(this, filteredPost.size(), Toast.LENGTH_SHORT).show();
+
+            postAdapter.setFilteredList(filteredPost);
+        }
+
+
+
+
     }
 }
