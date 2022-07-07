@@ -148,13 +148,6 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
         });
 
     }
-//    @Override
-//    public void applyTexts(String name, int age, String notes) {
-//        Post temp = new Post(name, age, notes);
-//        posts.add(temp);
-//        postAdapter.notifyItemInserted(posts.size()-1);
-//        Toast.makeText(MainActivity.this, "post added successfully in PostActivity", Toast.LENGTH_SHORT).show();
-//    }
 
 
     @Override

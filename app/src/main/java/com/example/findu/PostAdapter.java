@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
         viewHolder.age.setText(String.valueOf(post.getAge()));
         viewHolder.note.setText(post.getNote());
         viewHolder.setPhoto(post.getImage());
-        // TODO viewHolder.photo
+
 
 
     }
@@ -73,10 +74,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
             itemView.setOnClickListener(this);
         }
 
-        // TODO
+
         public void setPhoto(String urlPost) {
             photo = itemView.findViewById(R.id.imageView_post);
-            Glide.with(context).load(urlPost).into(photo);
+            Glide.with(context).load(urlPost).apply(new RequestOptions().override(150, 150)).centerCrop().into(photo);
         }
 
         @Override
