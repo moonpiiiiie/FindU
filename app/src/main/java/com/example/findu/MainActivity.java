@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
     PostAdapter postAdapter;
 
     Spinner spinner_gender;
-    FloatingActionButton addPost;
+    FloatingActionButton fab;
     private Query query;
     private ListenerRegistration listenerRegistration;
 
@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
 
 
 
-
         posts = new ArrayList<>();
         /**
           // test post data
@@ -72,11 +71,11 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
         posts.add(new Post("Jinru Xu", 12,  "San Jose"));
         posts.add(new Post("Mingyue Wang", 16,  "San Jose")); **/
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        postAdapter = new PostAdapter(this, posts);
+        postAdapter = new PostAdapter(MainActivity.this, posts);
         recyclerView.setAdapter(postAdapter);
 
-        addPost = findViewById(R.id.Button_addPost);
-        addPost.setOnClickListener(new View.OnClickListener() {
+        fab = findViewById(R.id.Button_addPost);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                openAddPostDialog(view);
@@ -94,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
                         Toast.makeText(MainActivity.this, "Reached Bottom", Toast.LENGTH_SHORT).show();
                 }
             });
+
             query = firestore.collection("Posts").orderBy("time" , Query.Direction.DESCENDING);
             listenerRegistration = query.addSnapshotListener(MainActivity.this, new EventListener<QuerySnapshot>() {
                 @Override
@@ -138,9 +138,9 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
         });
     }
 
-    @Override
-    public void applyTexts(String name, int age, String notes) {
-        Post temp = new Post(name, age, notes);
+    //@Override
+    public void applyTexts(String name, int age, String notes,String gender, String imageUrl, String userId) {
+        Post temp = new Post(name, age, notes,gender, imageUrl, userId);
         posts.add(temp);
         postAdapter.notifyItemInserted(posts.size()-1);
         Toast.makeText(MainActivity.this, "post added successfully", Toast.LENGTH_SHORT).show();
@@ -160,5 +160,10 @@ public class MainActivity extends AppCompatActivity implements AddPost.PostDialo
             startActivity(new Intent(MainActivity.this, EmailPasswordActivity.class));
             finish();
         }
+    }
+
+    @Override
+    public void applyTexts(String name, int age, String notes) {
+
     }
 }

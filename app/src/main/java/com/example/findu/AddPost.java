@@ -56,7 +56,7 @@ public class AddPost extends AppCompatDialogFragment {
                         String gender = spinner_gender.toString();
                         // TODO: future change for firebase
 
-                        postDialogListener.applyTexts(name, age, note);
+                        //postDialogListener.applyTexts(name, age, note);
                     }
                 });
         return builder.create();
