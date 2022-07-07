@@ -128,17 +128,6 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
 
 
     @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        // Check to see if the user is currently signed in.
-        if (currentUser == null) {
-            startActivity(new Intent(MainActivity.this, EmailPasswordActivity.class));
-            finish();
-        }
-    }
-
-    @Override
     public void onPostClick(int position) {
         Log.d("PostActivity", "onPostClicked");
         Intent intent = new Intent(this, SinglePostActivity.class);
