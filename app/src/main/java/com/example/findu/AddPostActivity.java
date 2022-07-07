@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.findu.DNU.AddPost;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -49,6 +50,8 @@ public class AddPostActivity extends AppCompatActivity {
     private String currentUserId;
     private ImageView post_photo;
     private Uri postImageUri=null;
+//    private PostListener postListener;
+//    Context context;
 
     ActivityResultLauncher<String> selectPhoto;
     @Override
@@ -58,6 +61,9 @@ public class AddPostActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
         currentUserId = auth.getCurrentUser().getUid();
+
+//        context = getApplicationContext();
+//        postListener = (PostListener) context;
 
         setContentView(R.layout.activity_add_post);
 
@@ -80,39 +86,20 @@ public class AddPostActivity extends AppCompatActivity {
 
         // post photo
         post_photo = findViewById(R.id.post_photo);
-        button_uploadPhoto = findViewById(R.id.button_uploadPhoto);
+//        button_uploadPhoto = findViewById(R.id.button_uploadPhoto);
 
-        button_uploadPhoto.setOnClickListener(new View.OnClickListener() {
-
-
+        post_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!checkGalleryPermission()) {
+                    requestGalleryPermission();
+                }
                 Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 galleryResultLauncher.launch(gallery);
+
                 //StorageReference postRef = storageReference.child("post_photo").child(FieldValue.serverTimestamp().toString() + ".jpg");
 
-
-//                boolean pick = true;
-//                if (pick) {
-//                    if (!checkCameraPermission()) {
-//                        requestCameraPermission();
-//                    } else
-//                    {
-//                        pickImage();
-//                    }
-//                } else {
-//                    if (!checkGalleryPermission()) {
-//                        requestGalleryPermission();
-//                    } else
-//                    {
-//                        pickImage();
-//                    }
-//                }
             }
-
-
-
-
         });
 
 
@@ -159,6 +146,8 @@ public class AddPostActivity extends AppCompatActivity {
                                         userPost.put("time", FieldValue.serverTimestamp());
                                         db.writePost(userPost);
 
+                                        Toast.makeText(AddPostActivity.this, "Post added successfully!", Toast.LENGTH_SHORT).show();
+                                        finish();
                                     }
                                 });
 
@@ -171,7 +160,6 @@ public class AddPostActivity extends AppCompatActivity {
                     });
                 }else{
                     Toast.makeText(AddPostActivity.this, "Please upload the image and write key information", Toast.LENGTH_SHORT).show();
-
                     }
                 /**
 
@@ -206,19 +194,20 @@ public class AddPostActivity extends AppCompatActivity {
 
     }
 
-//    private void pickImage() {
-//        return;
-//    }
-//
-//    private void requestGalleryPermission() {
-//        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
-//    }
-//
-//    private boolean checkGalleryPermission() {
-//        boolean galleryPer = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-//        return galleryPer;
-//    }
-//
+    public interface PostListener {
+        void applyTexts(String name, int age, String notes);
+    }
+
+
+    private void requestGalleryPermission() {
+        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+    }
+
+    private boolean checkGalleryPermission() {
+        boolean galleryPer = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        return galleryPer;
+    }
+
 //    private void requestCameraPermission() {
 //        requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
 //    }
@@ -228,4 +217,6 @@ public class AddPostActivity extends AppCompatActivity {
 //        boolean galleryPer = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 //        return cameraPer&&galleryPer;
 //    }
+
+
 }

@@ -33,6 +33,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        getSupportActionBar().hide();
 
         txtSignIn = findViewById(R.id.txtSignIn);
         edtName = findViewById(R.id.edtSignUpName);
@@ -107,7 +108,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(SignUpActivity.this, "Error " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.INVISIBLE);
-                btnSignUp.setVisibility(View.INVISIBLE);
+                btnSignUp.setVisibility(View.VISIBLE);
             }
         });
 

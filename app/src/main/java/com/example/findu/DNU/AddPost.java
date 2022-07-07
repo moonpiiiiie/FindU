@@ -1,4 +1,4 @@
-package com.example.findu;
+package com.example.findu.DNU;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.example.findu.R;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.storage.StorageReference;
 

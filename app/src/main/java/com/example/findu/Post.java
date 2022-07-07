@@ -1,24 +1,19 @@
+
+
 package com.example.findu;
+
+import com.google.firebase.firestore.FieldValue;
 
 public class Post {
     private String name;
     private int age;
-    private String gender;
-    private String postImageUrl;
-    private String notes;
-    private  String userId;
 
-    public Post(String name, int age, String notes, String postImageUrl, String gender, String userId) {
-        this.name = name;
-        this.age = age;
-        this.notes = notes;
-        this.postImageUrl = postImageUrl;
-        this.gender = gender;
-        this.userId = userId;
+    public String getImage_uri() {
+        return image_uri;
     }
 
-    public String getPostImageUrl() {
-        return postImageUrl;
+    public void setImage_uri(String image_uri) {
+        this.image_uri = image_uri;
     }
 
     public String getGender() {
@@ -29,10 +24,43 @@ public class Post {
         this.gender = gender;
     }
 
-    public void setPostImageUrl(String postImageUrl) {
-        this.postImageUrl = postImageUrl;
+    public String getUser_id() {
+        return user_id;
     }
 
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public FieldValue getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(FieldValue timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    private String image_uri;
+    private String gender;
+    private String user_id;
+    private FieldValue timestamp;
+    private String notes;
+    //     userPost.put("name", name);
+//     userPost.put("image", uri.toString());
+//     userPost.put("age", age);
+//     userPost.put("gender", gender);
+//     userPost.put("user_id", currentUserId);
+//     userPost.put("note", note);
+//     userPost.put("time", FieldValue.serverTimestamp());
+    public Post(String name, String image_uri, int age, String gender, String user_id, String notes, FieldValue timestamp) {
+        this.name = name;
+        this.image_uri = image_uri;
+        this.age = age;
+        this.gender = gender;
+        this.user_id = user_id;
+        this.notes = notes;
+        this.timestamp = timestamp;
+    }
     public String getName() {
         return name;
     }
@@ -59,11 +87,6 @@ public class Post {
         this.notes = notes;
     }
 
-    public String getUserId() {
-        return userId;
-    }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+
 }
