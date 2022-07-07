@@ -1,5 +1,6 @@
 package com.example.findu;
 
+import android.app.Activity;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -17,9 +19,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
     private LayoutInflater layoutInflater;
     private List<Post> posts;
     private OnPostListener onPostListener;
+    private Context context;
 
 
     PostAdapter(Context context, List<Post> posts, OnPostListener onPostListener) {
+        this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
         this.posts = posts;
         this.onPostListener = onPostListener;
@@ -37,6 +41,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
         viewHolder.name.setText(post.getName());
         viewHolder.age.setText(String.valueOf(post.getAge()));
         viewHolder.note.setText(post.getNote());
+        viewHolder.setPhoto(post.getImage());
         // TODO viewHolder.photo
 
 
@@ -62,10 +67,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
             name = itemView.findViewById(R.id.textView_name);
             age = itemView.findViewById(R.id.textView_age);
             gender = itemView.findViewById(R.id.textView_gender);
-            photo = itemView.findViewById(R.id.imageView_post);
+//
             note = itemView.findViewById(R.id.textView_note);
             this.onPostListener = onPostListener;
             itemView.setOnClickListener(this);
+        }
+
+        // TODO
+        public void setPhoto(String urlPost) {
+            photo = itemView.findViewById(R.id.imageView_post);
+            Glide.with(context).load(urlPost).into(photo);
         }
 
         @Override
