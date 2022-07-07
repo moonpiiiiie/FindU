@@ -31,6 +31,7 @@ public class EmailPasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_password);
+        getSupportActionBar().hide();
 
         txtSignUp = findViewById(R.id.txtSignUp);
         edtEmail = findViewById(R.id.edtSignInEmail);
