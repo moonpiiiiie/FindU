@@ -29,6 +29,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
         this.posts = posts;
         this.onPostListener = onPostListener;
     }
+
+    public void setFilteredList(List<Post> filteredList){
+        this.posts = filteredList;
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

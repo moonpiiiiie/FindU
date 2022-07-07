@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,7 +14,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,6 +34,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements PostAdapter.OnPostListener {
     BottomNavigationView bottomNav;
@@ -46,11 +52,15 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
     FirebaseFirestore db;
 
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+
 
         final SwipeRefreshLayout pullToRefresh = findViewById(R.id.swiperefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -73,6 +83,27 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
         postAdapter = new PostAdapter(MainActivity.this, posts, this);
         recyclerView.setAdapter(postAdapter);
         db = FirebaseFirestore.getInstance();
+
+        //search
+
+        EditText searchText = (EditText)findViewById(R.id.editText_search) ;
+        String searchInput = searchText.getText().toString();
+        ImageView searchView = findViewById(R.id.imageview_search);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchByName(searchInput);
+
+            }
+        });
+
+
+
+
+
+
+
+
 
         fetchPosts();
 //        EventChangeListener();
@@ -126,6 +157,23 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
                         }
                     }
                 });
+    }
+
+    private void searchByName(String name){
+        List<Post> filteredPost = new ArrayList<>();
+        for (Post item: filteredPost){
+            if(item.getName().toLowerCase().contains(name.toLowerCase())){
+
+                filteredPost.add(item);
+            }
+        }
+        if (filteredPost.isEmpty()){
+            Toast.makeText(this, "No Data Found", Toast.LENGTH_SHORT).show();
+        }else{
+            postAdapter.setFilteredList(filteredPost);
+        }
+
+
     }
 
     private void fetchPosts() {
