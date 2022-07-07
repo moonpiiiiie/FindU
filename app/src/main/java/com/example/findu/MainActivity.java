@@ -72,20 +72,14 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
         // test post data
         posts = new ArrayList<>();
 
-
-
-
-
-        fetchPosts();
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         postAdapter = new PostAdapter(MainActivity.this, posts, this);
         recyclerView.setAdapter(postAdapter);
         db = FirebaseFirestore.getInstance();
 
 
-
-
+        fetchPosts();
+        
 
         ImageView searchView = findViewById(R.id.imageview_search);
         EditText searchText = (EditText)findViewById(R.id.editText_search) ;
