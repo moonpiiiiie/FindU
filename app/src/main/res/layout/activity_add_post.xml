@@ -27,11 +27,6 @@
             android:layout_height="150dp"
             android:src="@drawable/ic_baseline_photo_library_24" />
 
-        <!--        <Button-->
-        <!--            android:id="@+id/button_uploadPhoto"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:text="upload"/>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -82,30 +77,20 @@
 
         <EditText
             android:id="@+id/edittext_notes"
-            android:layout_width="match_parent"
+            android:lines="8"
+            android:minLines="6"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="5dp"
+            android:gravity="top|start"
+            android:maxLines="8"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="10dp"
-            android:autofillHints=""
-            android:hint="notes"
-            android:inputType="textWebEmailAddress"
-            android:minHeight="48dp"
-            tools:ignore="TextContrastCheck" />
+            android:layout_width="match_parent"
+            android:scrollbars="vertical"
+            android:hint="notes (indicate your location, situation, etc)"
+             />
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </RelativeLayout>
 
     <Button
         android:id="@+id/button_cancel"
@@ -114,7 +99,6 @@
         android:layout_gravity="bottom|end"
         android:layout_marginTop="139dp"
         android:layout_marginEnd="61dp"
-        android:layout_marginBottom="200dp"
         android:text="cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -128,7 +112,6 @@
         android:layout_gravity="bottom|start"
         android:layout_marginStart="61dp"
         android:layout_marginTop="139dp"
-        android:layout_marginBottom="200dp"
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_cancel"
