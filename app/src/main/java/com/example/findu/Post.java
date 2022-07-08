@@ -10,6 +10,17 @@ public class Post {
     private String user_id;
     private Timestamp time;
     private String note;
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+
 
     public String getImage() {
         return image;
@@ -74,7 +85,7 @@ public class Post {
 //     userPost.put("user_id", currentUserId);
 //     userPost.put("note", note);
 //     userPost.put("time", FieldValue.serverTimestamp());
-    public Post(String name, String image, int age, String gender, String user_id, String note, Timestamp time) {
+    public Post(String name, String image, int age, String gender, String user_id, String note, Timestamp time, String category) {
         this.name = name;
         this.image = image;
         this.age = age;
@@ -82,6 +93,7 @@ public class Post {
         this.user_id = user_id;
         this.note = note;
         this.time = time;
+        this.category = category;
     }
     public Post() {}
 

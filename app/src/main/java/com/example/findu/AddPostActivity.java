@@ -15,11 +15,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -50,8 +52,9 @@ public class AddPostActivity extends AppCompatActivity {
     private String currentUserId;
     private ImageView post_photo;
     private Uri postImageUri=null;
-//    private PostListener postListener;
-//    Context context;
+    RadioButton radioButton_toFind, radioButton_tobeFound;
+    String category;
+
 
     ActivityResultLauncher<String> selectPhoto;
     @Override
@@ -61,9 +64,6 @@ public class AddPostActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
         currentUserId = auth.getCurrentUser().getUid();
-
-//        context = getApplicationContext();
-//        postListener = (PostListener) context;
 
         setContentView(R.layout.activity_add_post);
 
@@ -105,6 +105,10 @@ public class AddPostActivity extends AppCompatActivity {
 
 
 
+        //radiobutton
+        radioButton_toFind = findViewById(R.id.radioButton_tofind);
+        radioButton_tobeFound = findViewById(R.id.radioButton_tobefound);
+
 
 
 
@@ -115,7 +119,7 @@ public class AddPostActivity extends AppCompatActivity {
         spinner_gender = findViewById(R.id.spinner_gender);
 
 
-        // TODO SAVE BUTTON
+        // save button
         button_save = findViewById(R.id.button_save);
         button_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +148,7 @@ public class AddPostActivity extends AppCompatActivity {
                                         userPost.put("user_id", currentUserId);
                                         userPost.put("note", note);
                                         userPost.put("time", FieldValue.serverTimestamp());
+                                        userPost.put("category", category);
                                         db.writePost(userPost);
 
                                         Toast.makeText(AddPostActivity.this, "Post added successfully!", Toast.LENGTH_SHORT).show();
@@ -194,8 +199,21 @@ public class AddPostActivity extends AppCompatActivity {
 
     }
 
-    public interface PostListener {
-        void applyTexts(String name, int age, String notes);
+
+    public void onRadioButtonClicked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+        category="";
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radioButton_tobefound:
+                if(checked)
+                    category = "to be found";
+                break;
+            case R.id.radioButton_tofind:
+                if(checked)
+                    category = "to find";
+                break;
+        }
     }
 
 

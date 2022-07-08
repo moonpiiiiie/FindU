@@ -42,6 +42,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
         viewHolder.name.setText(post.getName());
         viewHolder.age.setText(String.valueOf(post.getAge()));
         viewHolder.note.setText(post.getNote());
+        viewHolder.category.setText(post.getCategory());
         viewHolder.setPhoto(post.getImage());
 
     }
@@ -57,7 +58,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView name, age, gender, note;
+        TextView name, age, gender, note, category;
         ImageView photo;
         OnPostListener onPostListener;
 
@@ -66,6 +67,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
             name = itemView.findViewById(R.id.textView_name);
             age = itemView.findViewById(R.id.textView_age);
             gender = itemView.findViewById(R.id.textView_gender);
+            category = itemView.findViewById(R.id.textView_category);
 //
             note = itemView.findViewById(R.id.textView_note);
             this.onPostListener = onPostListener;

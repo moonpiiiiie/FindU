@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
         });
 
 
-//        EventChangeListener();
 
         addPost = findViewById(R.id.Button_addPost);
         addPost.setOnClickListener(new View.OnClickListener() {
@@ -105,11 +104,7 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
                 startActivity(new Intent(view.getContext(), AddPostActivity.class));
             }
         });
-//        //spinner widget
-//        spinner_gender = findViewById(R.id.spinner_gender);
-//        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.gender, android.R.layout.simple_spinner_item);
-//        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinner_gender.setAdapter(spinnerAdapter);
+
 
         bottomNav = findViewById(R.id.bottom_nav);
         bottomNav.setSelectedItemId(R.id.post_nav_button);
@@ -128,25 +123,6 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
             }
             return false;
         });
-    }
-
-    private void EventChangeListener() {
-        db.collection("posts").orderBy("name", Query.Direction.ASCENDING)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (error != null) {
-                            Log.e("Firestore retrieve data error", error.getMessage());
-                            return;
-                        }
-                        for (DocumentChange dc : value.getDocumentChanges()) {
-                            if (dc.getType() == DocumentChange.Type.ADDED) {
-                                posts.add(dc.getDocument().toObject(Post.class));
-                            }
-                            postAdapter.notifyDataSetChanged();
-                        }
-                    }
-                });
     }
 
 
