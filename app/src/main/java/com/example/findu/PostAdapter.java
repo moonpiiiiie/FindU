@@ -22,16 +22,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
     private OnPostListener onPostListener;
     private Context context;
 
-
     PostAdapter(Context context, List<Post> posts, OnPostListener onPostListener) {
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
         this.posts = posts;
         this.onPostListener = onPostListener;
-    }
-    public void setFilteredList(List<Post> filteredList){
-        this.posts = filteredList;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -48,8 +43,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
         viewHolder.age.setText(String.valueOf(post.getAge()));
         viewHolder.note.setText(post.getNote());
         viewHolder.setPhoto(post.getImage());
-
-
 
     }
 

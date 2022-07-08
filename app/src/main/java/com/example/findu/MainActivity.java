@@ -184,22 +184,12 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
     }
 
     private void searchByName(String searchInput){
-
-        ArrayList<Post> filteredPost = new ArrayList<>();
-
-        for (Post item: posts){
-            if(item.getName().toLowerCase().contains(searchInput.toLowerCase())){
-
-                filteredPost.add(item);
-                Toast.makeText(this, "Find possible matches", Toast.LENGTH_SHORT).show();
-            }
-        }
-        if (filteredPost.isEmpty()){
+        posts.removeIf(item -> !item.getName().toLowerCase().contains(searchInput.toLowerCase()));
+        if (posts.isEmpty()){
             Toast.makeText(this, "No Data Found", Toast.LENGTH_SHORT).show();
         }else{
-            //Toast.makeText(this, filteredPost.size(), Toast.LENGTH_SHORT).show();
-
-            postAdapter.setFilteredList(filteredPost);
+            Toast.makeText(this, "Find possible matches", Toast.LENGTH_SHORT).show();
+            postAdapter.notifyDataSetChanged();
         }
 
 
