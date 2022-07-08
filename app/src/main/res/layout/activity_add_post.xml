@@ -34,6 +34,7 @@
                 android:id="@+id/radioButton_tobefound"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:onClick="onRadioButtonClicked"
                 android:layout_weight="1"
                 android:text="To be Found" />
@@ -63,6 +64,7 @@
 
             <EditText
                 android:id="@+id/edittext_name"
+                android:background="@drawable/edittext_rounded"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="8dp"
@@ -79,6 +81,7 @@
             <EditText
                 android:id="@+id/edittext_age"
                 android:layout_width="80dp"
+                android:background="@drawable/edittext_rounded"
                 android:layout_height="50dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="10dp"
@@ -104,9 +107,11 @@
 
         <EditText
             android:id="@+id/edittext_notes"
+            android:background="@drawable/edittext_rounded"
             android:lines="8"
             android:minLines="6"
             android:layout_marginLeft="6dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="5dp"
             android:gravity="top|start"
             android:maxLines="8"
