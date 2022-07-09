@@ -8,6 +8,9 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="profile">Profile</string>
     <string name="maptype">Map Type</string>
+    <string name="username">Enter Your Name</string>
+    <string name="UserName">Enter Your Name</string>
+    <string name="save">Save</string>
     <string-array name="mapType">
         <item>Normal</item>
         <item>Satellite</item>
