@@ -154,8 +154,10 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
         Intent intent = new Intent(this, SinglePostActivity.class);
         String tmpName = posts.get(position).getName();
         String tmpNotes = posts.get(position).getNote();
+        String tmpid = posts.get(position).getPost_id();
         intent.putExtra("name", tmpName);
         intent.putExtra("note", tmpNotes);
+        intent.putExtra("post_id", tmpid);
         startActivity(intent);
     }
 
@@ -167,9 +169,5 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
             Toast.makeText(this, "Find possible matches", Toast.LENGTH_SHORT).show();
             postAdapter.notifyDataSetChanged();
         }
-
-
-
-
     }
 }

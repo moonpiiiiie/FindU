@@ -87,7 +87,7 @@
     <EditText
         android:hint="Write Comment"
         android:background="@drawable/edittext_rounded"
-        android:id="@+id/post_detail_comment"
+        android:id="@+id/editText_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -98,7 +98,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView_singleNotes"  />
 
     <Button
-        android:id="@+id/post_detail_add_comment_btn"
+        android:id="@+id/button_addComment"
         android:layout_width="65dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -107,11 +107,11 @@
         android:layout_marginRight="8dp"
         android:background="@drawable/edittext_rounded"
         android:text="Add"
-        app:layout_constraintBottom_toBottomOf="@+id/post_detail_comment"
+        app:layout_constraintBottom_toBottomOf="@+id/editText_comment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/post_detail_comment"
-        app:layout_constraintTop_toTopOf="@+id/post_detail_comment"
+        app:layout_constraintStart_toEndOf="@+id/editText_comment"
+        app:layout_constraintTop_toTopOf="@+id/editText_comment"
         app:layout_constraintVertical_bias="0.529" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -121,7 +121,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/post_detail_comment"/>
+        app:layout_constraintTop_toBottomOf="@+id/editText_comment"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

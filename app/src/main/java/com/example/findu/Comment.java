@@ -4,26 +4,26 @@ import com.google.firebase.database.ServerValue;
 
 public class Comment {
 
-    private String content,uid,uimg,uname;
+    private String content;
+    private String comment_user;
+    private String uname;
     private Object timestamp;
 
 
     public Comment() {
     }
 
-    public Comment(String content, String uid, String uimg, String uname) {
+    public Comment(String content, String comment_user, String uname) {
         this.content = content;
-        this.uid = uid;
-        this.uimg = uimg;
+        this.comment_user = comment_user;
         this.uname = uname;
         this.timestamp = ServerValue.TIMESTAMP;
 
     }
 
-    public Comment(String content, String uid, String uimg, String uname, Object timestamp) {
+    public Comment(String content, String comment_id, String uname, Object timestamp) {
         this.content = content;
-        this.uid = uid;
-        this.uimg = uimg;
+        this.comment_user = comment_id;
         this.uname = uname;
         this.timestamp = timestamp;
     }
@@ -36,20 +36,12 @@ public class Comment {
         this.content = content;
     }
 
-    public String getUid() {
-        return uid;
+    public String getComment_user() {
+        return comment_user;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public String getUimg() {
-        return uimg;
-    }
-
-    public void setUimg(String uimg) {
-        this.uimg = uimg;
+    public void setComment_user(String comment_user) {
+        this.comment_user = comment_user;
     }
 
     public String getUname() {

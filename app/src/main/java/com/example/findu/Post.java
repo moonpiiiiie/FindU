@@ -1,6 +1,9 @@
 package com.example.findu;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentId;
+
+import java.util.UUID;
 
 public class Post {
     private String name;
@@ -11,6 +14,7 @@ public class Post {
     private Timestamp time;
     private String note;
     private String category;
+    private String post_id;
 
     public String getCategory() {
         return category;
@@ -20,7 +24,13 @@ public class Post {
         this.category = category;
     }
 
+    public String getPost_id() {
+        return post_id;
+    }
 
+    public void setPost_id(String post_id) {
+        this.post_id = post_id;
+    }
 
     public String getImage() {
         return image;
@@ -78,7 +88,9 @@ public class Post {
         this.time = time;
     }
 
-//     userPost.put("name", name);
+
+
+    //     userPost.put("name", name);
 //     userPost.put("image", uri.toString());
 //     userPost.put("age", age);
 //     userPost.put("gender", gender);
@@ -94,6 +106,8 @@ public class Post {
         this.note = note;
         this.time = time;
         this.category = category;
+        this.post_id = UUID.randomUUID().toString();
+
     }
     public Post() {}
 

@@ -2,6 +2,7 @@ package com.example.findu;
 
 import android.content.Context;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-
-        holder.userIcon.setText(comments.get(position).getUname().substring(0, 1).toUpperCase());
+        Log.d("getUname", comments.get(position).getUname());
+        //todo
+//        holder.userIcon.setText(comments.get(position).getUname().substring(0, 1).toUpperCase());
         holder.comment_name.setText(comments.get(position).getUname());
         holder.comment_content.setText(comments.get(position).getContent());
         holder.comment_date.setText(timestampToString((Long) comments.get(position).getTimestamp()));

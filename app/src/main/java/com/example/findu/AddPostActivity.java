@@ -1,13 +1,5 @@
 package com.example.findu;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -15,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,16 +16,29 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.example.findu.DNU.AddPost;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.sql.Time;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,13 +51,13 @@ public class AddPostActivity extends AppCompatActivity {
     private Button button_save;
     private Button button_cancel;
     private StorageReference storageReference;
-    private Button button_uploadPhoto;
     private FirebaseAuth auth;
     private String currentUserId;
     private ImageView post_photo;
     private Uri postImageUri=null;
     RadioButton radioButton_toFind, radioButton_tobeFound;
     String category;
+
 
 
     ActivityResultLauncher<String> selectPhoto;
@@ -64,6 +68,9 @@ public class AddPostActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
         currentUserId = auth.getCurrentUser().getUid();
+
+
+
 
         setContentView(R.layout.activity_add_post);
 
@@ -96,20 +103,14 @@ public class AddPostActivity extends AppCompatActivity {
                 }
                 Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 galleryResultLauncher.launch(gallery);
-
                 //StorageReference postRef = storageReference.child("post_photo").child(FieldValue.serverTimestamp().toString() + ".jpg");
-
             }
         });
-
-
 
 
         //radiobutton
         radioButton_toFind = findViewById(R.id.radioButton_tofind);
         radioButton_tobeFound = findViewById(R.id.radioButton_tobefound);
-
-
 
 
         // post text
@@ -120,6 +121,7 @@ public class AddPostActivity extends AppCompatActivity {
 
 
         // save button
+        // TODO add progress bar
         button_save = findViewById(R.id.button_save);
         button_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +132,6 @@ public class AddPostActivity extends AppCompatActivity {
                 String gender = spinner_gender.getSelectedItem().toString();
 
 
-                FirestoreAPI db = new FirestoreAPI();
                 if (!name.isEmpty() && !note.isEmpty() &&postImageUri!=null ) {
                     StorageReference postRef = storageReference.child("post_photo").child(FieldValue.serverTimestamp().toString() + ".jpg");
                     postRef.putFile(postImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -141,16 +142,18 @@ public class AddPostActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         Map<String, Object> userPost = new HashMap<String, Object>();
-                                        userPost.put("name", name);
-                                        userPost.put("image", uri.toString());
-                                        userPost.put("age", age);
-                                        userPost.put("gender", gender);
-                                        userPost.put("user_id", currentUserId);
-                                        userPost.put("note", note);
-                                        userPost.put("time", FieldValue.serverTimestamp());
-                                        userPost.put("category", category);
-                                        db.writePost(userPost);
-
+                                        //String name, String image, int age, String gender, String user_id, String note, Timestamp time, String category
+                                        Timestamp ts = new Timestamp(new Date());
+                                        Post post = new Post(name, uri.toString(), age, gender, currentUserId, note, ts, category);
+//                                        userPost.put("name", name);
+//                                        userPost.put("image", uri.toString());
+//                                        userPost.put("age", age);
+//                                        userPost.put("gender", gender);
+//                                        userPost.put("user_id", currentUserId);
+//                                        userPost.put("note", note);
+//                                        userPost.put("time", FieldValue.serverTimestamp());
+//                                        userPost.put("category", category);
+                                        FirestoreAPI.writePost(post);
                                         Toast.makeText(AddPostActivity.this, "Post added successfully!", Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
@@ -166,16 +169,6 @@ public class AddPostActivity extends AppCompatActivity {
                 }else{
                     Toast.makeText(AddPostActivity.this, "Please upload the image and write key information", Toast.LENGTH_SHORT).show();
                     }
-                /**
-
-                    Map<String, Object> userPost = new HashMap<String, Object>();
-                    userPost.put("name", name);
-                    userPost.put("age", age);
-                    userPost.put("gender", gender);
-                    //userPost.put("user_id", currentUserId);
-                    userPost.put("note", note);
-                    userPost.put("time", FieldValue.serverTimestamp());
-                    db.writePost(userPost); **/
 
                 }
 
@@ -225,16 +218,5 @@ public class AddPostActivity extends AppCompatActivity {
         boolean galleryPer = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         return galleryPer;
     }
-
-//    private void requestCameraPermission() {
-//        requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
-//    }
-//
-//    private boolean checkCameraPermission() {
-//        boolean cameraPer = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
-//        boolean galleryPer = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-//        return cameraPer&&galleryPer;
-//    }
-
 
 }
