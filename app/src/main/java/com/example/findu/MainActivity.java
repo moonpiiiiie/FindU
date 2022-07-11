@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnPos
         recyclerView = findViewById(R.id.recyclerView_post);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        Log.d("displayname",firebaseAuth.getCurrentUser().getDisplayName());
 
         // test post data
         posts = new ArrayList<>();
