@@ -11,6 +11,8 @@
     <string name="username">Enter Your Name</string>
     <string name="UserName">Enter Your Name</string>
     <string name="save">Save</string>
+    <string name="Password">Enter New Password</string>
+    <string name="ConfirmPassword">Confirm New Password</string>
     <string-array name="mapType">
         <item>Normal</item>
         <item>Satellite</item>
