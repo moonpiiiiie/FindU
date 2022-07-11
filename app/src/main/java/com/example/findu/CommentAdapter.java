@@ -37,9 +37,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        Log.d("getUname", comments.get(position).getUname());
-        //todo
-//        holder.userIcon.setText(comments.get(position).getUname().substring(0, 1).toUpperCase());
+        holder.userIcon.setText(comments.get(position).getUname().substring(0, 1).toUpperCase());
         holder.comment_name.setText(comments.get(position).getUname());
         holder.comment_content.setText(comments.get(position).getContent());
         holder.comment_date.setText(timestampToString((Long) comments.get(position).getTimestamp()));

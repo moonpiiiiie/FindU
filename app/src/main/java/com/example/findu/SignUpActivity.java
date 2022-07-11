@@ -3,6 +3,7 @@ package com.example.findu;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -117,7 +118,7 @@ public class SignUpActivity extends AppCompatActivity {
                     documentRef.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            
+
                             Log.d("signupUser", "on success, userName" + userId);
                         }
                     });

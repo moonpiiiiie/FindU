@@ -145,14 +145,6 @@ public class AddPostActivity extends AppCompatActivity {
                                         //String name, String image, int age, String gender, String user_id, String note, Timestamp time, String category
                                         Timestamp ts = new Timestamp(new Date());
                                         Post post = new Post(name, uri.toString(), age, gender, currentUserId, note, ts, category);
-//                                        userPost.put("name", name);
-//                                        userPost.put("image", uri.toString());
-//                                        userPost.put("age", age);
-//                                        userPost.put("gender", gender);
-//                                        userPost.put("user_id", currentUserId);
-//                                        userPost.put("note", note);
-//                                        userPost.put("time", FieldValue.serverTimestamp());
-//                                        userPost.put("category", category);
                                         FirestoreAPI.writePost(post);
                                         Toast.makeText(AddPostActivity.this, "Post added successfully!", Toast.LENGTH_SHORT).show();
                                         finish();

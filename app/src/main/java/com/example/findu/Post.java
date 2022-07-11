@@ -16,6 +16,7 @@ public class Post {
     private String category;
     private String post_id;
 
+
     public String getCategory() {
         return category;
     }

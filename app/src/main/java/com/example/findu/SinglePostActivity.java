@@ -24,6 +24,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -36,7 +39,7 @@ public class SinglePostActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     FirebaseUser firebaseUser;
     FirebaseAuth firebaseAuth;
-
+    FirebaseFirestore db;
 
     // comment section
     Button addCommentButton;
@@ -44,6 +47,8 @@ public class SinglePostActivity extends AppCompatActivity {
     CommentAdapter commentAdapter;
     ArrayList<Comment> comments;
     EditText editText_comment;
+
+    String comment_userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +62,12 @@ public class SinglePostActivity extends AppCompatActivity {
         Intent intent = getIntent();
         singlePost_name.setText(intent.getStringExtra("name"));
         post_id = intent.getStringExtra("post_id");
-
+        comment_userName = intent.getStringExtra("userName");
         // firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-
+        db = FirebaseFirestore.getInstance();
 
         // comment section
         addCommentButton = findViewById(R.id.button_addComment);
@@ -77,9 +82,8 @@ public class SinglePostActivity extends AppCompatActivity {
                 String comment_content = editText_comment.getText().toString();
                 String comment_userId = firebaseUser.getUid();
                 Log.d("currentuid", firebaseUser.getUid());
-                String comment_userName = firebaseUser.getDisplayName();
-                Comment comment = new Comment(comment_content, comment_userId, comment_userName);
 
+                Comment comment = new Comment(comment_content, comment_userId, comment_userName);
                 commentReference.setValue(comment).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
