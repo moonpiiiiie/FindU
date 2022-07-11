@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -24,7 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.example.findu.DNU.AddPost;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -49,7 +50,6 @@ public class AddPostActivity extends AppCompatActivity {
     private EditText editText_age;
     private EditText editText_notes;
     private Spinner spinner_gender;
-    private AddPost.PostDialogListener postDialogListener;
     private Button button_save;
     private Button button_cancel;
     private StorageReference storageReference;
@@ -59,6 +59,8 @@ public class AddPostActivity extends AppCompatActivity {
     private Uri postImageUri=null;
     RadioButton radioButton_toFind, radioButton_tobeFound;
     String category;
+
+    ProgressBar progressBar_addPost;
 
     FirebaseFirestore db;
 
@@ -114,7 +116,9 @@ public class AddPostActivity extends AppCompatActivity {
         radioButton_toFind = findViewById(R.id.radioButton_tofind);
         radioButton_tobeFound = findViewById(R.id.radioButton_tobefound);
 
-
+        // progress bar
+        progressBar_addPost = findViewById(R.id.progressBar_addPost);
+        progressBar_addPost.setVisibility(View.INVISIBLE);
         // post text
         editText_name = findViewById(R.id.edittext_name);
         editText_age = findViewById(R.id.edittext_age);
@@ -128,6 +132,7 @@ public class AddPostActivity extends AppCompatActivity {
         button_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar_addPost.setVisibility(View.VISIBLE);
                 String name = editText_name.getText().toString();
                 int age = Integer.parseInt(editText_age.getText().toString());
                 String note = editText_notes.getText().toString();
@@ -153,6 +158,7 @@ public class AddPostActivity extends AppCompatActivity {
                                         postRef.document(post_id).set(post);
 //                                        FirestoreAPI.writePost(post);
                                         Toast.makeText(AddPostActivity.this, "Post added successfully!", Toast.LENGTH_SHORT).show();
+                                        progressBar_addPost.setVisibility(View.INVISIBLE);
                                         finish();
                                     }
                                 });

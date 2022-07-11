@@ -68,6 +68,7 @@
             android:label="@string/title_activity_maps" />
         <activity
             android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="true" />
     </application>
 

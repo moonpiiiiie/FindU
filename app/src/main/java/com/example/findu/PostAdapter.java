@@ -43,6 +43,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
         viewHolder.age.setText(String.valueOf(post.getAge()));
         viewHolder.note.setText(post.getNote());
         viewHolder.category.setText(post.getCategory());
+        viewHolder.gender.setText(post.getGender());
         viewHolder.setPhoto(post.getImage());
 
     }
