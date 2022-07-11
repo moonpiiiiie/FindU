@@ -31,8 +31,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -58,7 +60,7 @@ public class AddPostActivity extends AppCompatActivity {
     RadioButton radioButton_toFind, radioButton_tobeFound;
     String category;
 
-
+    FirebaseFirestore db;
 
     ActivityResultLauncher<String> selectPhoto;
     @Override
@@ -69,7 +71,7 @@ public class AddPostActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         currentUserId = auth.getCurrentUser().getUid();
 
-
+        db = FirebaseFirestore.getInstance();
 
 
         setContentView(R.layout.activity_add_post);
@@ -145,7 +147,10 @@ public class AddPostActivity extends AppCompatActivity {
                                         //String name, String image, int age, String gender, String user_id, String note, Timestamp time, String category
                                         Timestamp ts = new Timestamp(new Date());
                                         Post post = new Post(name, uri.toString(), age, gender, currentUserId, note, ts, category);
-                                        FirestoreAPI.writePost(post);
+                                        CollectionReference postRef = db.collection("posts");
+                                        String post_id = post.getPost_id();
+                                        postRef.document(post_id).set(post);
+//                                        FirestoreAPI.writePost(post);
                                         Toast.makeText(AddPostActivity.this, "Post added successfully!", Toast.LENGTH_SHORT).show();
                                         finish();
                                     }

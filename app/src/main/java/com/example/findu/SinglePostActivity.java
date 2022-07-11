@@ -31,7 +31,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 public class SinglePostActivity extends AppCompatActivity {
-    TextView singlePost_name, singlePost_notes;
+    //Post section
+    Post currentPost;
+    TextView singlePost_name, singlePost_notes, singlePost_age, singlePost_gender;
     ImageView singlePost_photo;
     String post_id;
 
@@ -55,19 +57,41 @@ public class SinglePostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_post);
 
+        // post section
         singlePost_name = findViewById(R.id.textView_singleName);
         singlePost_notes = findViewById(R.id.textView_singleNotes);
         singlePost_photo = findViewById(R.id.imageView_singlePostPhoto);
+        singlePost_age = findViewById(R.id.textView_age);
+        singlePost_gender = findViewById(R.id.textView_gender);
 
+        // data carried from main activity
         Intent intent = getIntent();
         singlePost_name.setText(intent.getStringExtra("name"));
         post_id = intent.getStringExtra("post_id");
         comment_userName = intent.getStringExtra("userName");
+
+
         // firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
+
+        // retrieve data from firebase for the single post
+        DocumentReference postRef = db.collection("posts").document(post_id);
+        Log.v("post_id", post_id);
+        postRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                currentPost = documentSnapshot.toObject(Post.class);
+
+                // set data to post section
+                singlePost_notes.setText("Notes: " + currentPost.getNote());
+                singlePost_age.setText("Age: " + currentPost.getAge());
+            }
+        });
+
+
 
         // comment section
         addCommentButton = findViewById(R.id.button_addComment);
