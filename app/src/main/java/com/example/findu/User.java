@@ -3,6 +3,15 @@ package com.example.findu;
 public class User {
 
     String username;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     String email;
     public User(){
 

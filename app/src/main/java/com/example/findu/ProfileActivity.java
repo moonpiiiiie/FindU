@@ -14,10 +14,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
     String name;
     String email;
     ImageView imageName, imageEmail;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +59,25 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         if (user != null) {
-            for (UserInfo profile : user.getProviderData()) {
-                name = profile.getDisplayName();
-                email = profile.getEmail();
-                userName.setText(name);
-                userEmail.setText(email);
-            }
+            String userId = user.getUid();
+            db = FirebaseFirestore.getInstance();
+            DocumentReference userRef = db.collection("users").document(userId);
+            userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User user = documentSnapshot.toObject(User.class);
+                    name = user.getUsername();
+                    email = user.getEmail();
+                    userName.setText(name);
+                    userEmail.setText(email);
+                }
+            });
+//            for (UserInfo profile : user.getProviderData()) {
+//                name = profile.getDisplayName();
+//                email = profile.getEmail();
+//                userName.setText(name);
+//                userEmail.setText(email);
+//            }
         }
 
 
