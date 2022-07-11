@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,7 +35,7 @@ import java.util.ArrayList;
 public class SinglePostActivity extends AppCompatActivity {
     //Post section
     Post currentPost;
-    TextView singlePost_name, singlePost_notes, singlePost_age, singlePost_gender;
+    TextView singlePost_name, singlePost_notes, singlePost_age, singlePost_gender, singlePost_author;
     ImageView singlePost_photo;
     String post_id;
 
@@ -51,6 +53,7 @@ public class SinglePostActivity extends AppCompatActivity {
     EditText editText_comment;
 
     String comment_userName;
+    String author;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ public class SinglePostActivity extends AppCompatActivity {
         singlePost_photo = findViewById(R.id.imageView_singlePostPhoto);
         singlePost_age = findViewById(R.id.textView_age);
         singlePost_gender = findViewById(R.id.textView_gender);
+        singlePost_author = findViewById(R.id.textView_dateAuthor);
 
         // data carried from main activity
         Intent intent = getIntent();
@@ -79,7 +83,6 @@ public class SinglePostActivity extends AppCompatActivity {
 
         // retrieve data from firebase for the single post
         DocumentReference postRef = db.collection("posts").document(post_id);
-        Log.v("post_id", post_id);
         postRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -88,6 +91,19 @@ public class SinglePostActivity extends AppCompatActivity {
                 // set data to post section
                 singlePost_notes.setText("Notes: " + currentPost.getNote());
                 singlePost_age.setText("Age: " + currentPost.getAge());
+                singlePost_gender.setText("Gender: " + currentPost.getGender());
+
+                DocumentReference authorRef = db.collection("users").document(currentPost.getUser_id());
+                authorRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User user = documentSnapshot.toObject(User.class);
+                        author = user.getUsername();
+                        singlePost_author.setText("August 10, 2022 by " + author);
+                    }
+                });
+                String imageUrl = currentPost.getImage();
+                Glide.with(getApplicationContext()).load(imageUrl).apply(new RequestOptions().override(150, 150)).centerCrop().into(singlePost_photo);
             }
         });
 

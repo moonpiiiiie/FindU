@@ -149,6 +149,7 @@ public class AddPostActivity extends AppCompatActivity {
                                         Post post = new Post(name, uri.toString(), age, gender, currentUserId, note, ts, category);
                                         CollectionReference postRef = db.collection("posts");
                                         String post_id = post.getPost_id();
+                                        // customize post document id
                                         postRef.document(post_id).set(post);
 //                                        FirestoreAPI.writePost(post);
                                         Toast.makeText(AddPostActivity.this, "Post added successfully!", Toast.LENGTH_SHORT).show();
