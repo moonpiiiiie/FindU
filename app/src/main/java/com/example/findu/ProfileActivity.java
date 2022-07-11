@@ -10,10 +10,13 @@ import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,17 +25,41 @@ public class ProfileActivity extends AppCompatActivity {
     BottomNavigationView bottomNav;
     RecyclerView profileRecyclerView;
     Button btnSignOut;
+    Button btnEditProfile;
+    Button btnChangePassword;
+    TextView userName;
     TextView userEmail;
     FirebaseAuth mAuth;
+    FirebaseUser user;
+    String name;
+    String email;
+    ImageView imageName, imageEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
 
-
+        userName = findViewById(R.id.displayName);
+        userEmail = findViewById(R.id.displayEmail);
+        imageName = findViewById(R.id.imageName);
+        imageEmail = findViewById(R.id.imageEmail);
         btnSignOut = findViewById(R.id.btnSigOut);
+        btnEditProfile = findViewById(R.id.btnEditProfile);
+        btnChangePassword = findViewById(R.id.btnChangePassword);
+
+
+        if (user != null) {
+            for (UserInfo profile : user.getProviderData()) {
+                name = profile.getDisplayName();
+                email = profile.getEmail();
+                userName.setText(name);
+                userEmail.setText(email);
+            }
+        }
+
 
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,6 +68,24 @@ public class ProfileActivity extends AppCompatActivity {
                 signOutUser();
 
 
+            }
+        });
+
+        btnEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        btnChangePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProfileActivity.this, ChangePasswordActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -84,9 +129,11 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void signOutUser() {
-        Intent mainActivity = new Intent(ProfileActivity.this, MainActivity.class);
-        mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(mainActivity);
+        //Intent mainActivity = new Intent(ProfileActivity.this, MainActivity.class);
+        //mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //startActivity(mainActivity);
+        Intent intent = new Intent(ProfileActivity.this, EmailPasswordActivity.class);
+        startActivity(intent);
         finish();
     }
 }

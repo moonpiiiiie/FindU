@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class SignUpActivity extends AppCompatActivity {
 
     TextView txtSignIn;
-    EditText edtName, edtEmail, edtPassword, edtConfirmPassword;
+    EditText edtEmail, edtPassword, edtConfirmPassword;
     ProgressBar progressBar;
     Button btnSignUp;
     String txtName, txtEmail, txtPassword, txtConfirmPassword;
@@ -36,7 +36,6 @@ public class SignUpActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         txtSignIn = findViewById(R.id.txtSignIn);
-        edtName = findViewById(R.id.edtSignUpName);
         edtEmail = findViewById(R.id.edtSignUpEmail);
         edtPassword = findViewById(R.id.edtSignUpPassword);
         edtConfirmPassword = findViewById(R.id.edtSignUpConfirmPassword);
@@ -57,35 +56,30 @@ public class SignUpActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                txtName = edtName.getText().toString();
                 txtEmail = edtEmail.getText().toString();
                 txtPassword = edtPassword.getText().toString();
                 txtConfirmPassword = edtConfirmPassword.getText().toString();
 
-                if (!TextUtils.isEmpty(txtName)) {
-                    if (!TextUtils.isEmpty(txtEmail)) {
-                        if (txtEmail.matches(emailPattern)) {
-                            if (!TextUtils.isEmpty(txtPassword)) {
-                                if (!TextUtils.isEmpty(txtConfirmPassword)) {
-                                    if (txtConfirmPassword.equals(txtPassword)) {
-                                        SignUpUser();
-                                    } else {
-                                        edtConfirmPassword.setError("Confirm Password and Password should be same");
-                                    }
+                if (!TextUtils.isEmpty(txtEmail)) {
+                    if (txtEmail.matches(emailPattern)) {
+                        if (!TextUtils.isEmpty(txtPassword)) {
+                            if (!TextUtils.isEmpty(txtConfirmPassword)) {
+                                if (txtConfirmPassword.equals(txtPassword)) {
+                                    SignUpUser();
                                 } else {
-                                    edtConfirmPassword.setError("Confirm Password field can't be empty");
+                                    edtConfirmPassword.setError("Confirm Password and Password should be same");
                                 }
                             } else {
-                                edtPassword.setError("Password field can't be empty");
+                                edtConfirmPassword.setError("Confirm Password field can't be empty");
                             }
                         } else {
-                            edtEmail.setError("Enter a valid Email Address");
+                            edtPassword.setError("Password field can't be empty");
                         }
                     } else {
-                        edtEmail.setError("Email field can't be empty");
+                        edtEmail.setError("Enter a valid Email Address");
                     }
                 } else {
-                    edtName.setError("Name field can't be empty");
+                    edtEmail.setError("Email field can't be empty");
                 }
             }
         });
