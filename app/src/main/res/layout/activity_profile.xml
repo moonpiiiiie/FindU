@@ -27,9 +27,10 @@
         app:backgroundTint="@color/blue_ukraine"
         app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.636" />
+        app:layout_constraintVertical_bias="0.572" />
 
     <Button
         android:id="@+id/btnChangePassword"
@@ -38,11 +39,12 @@
         android:text="Change Password"
         android:textColor="@color/white"
         app:backgroundTint="@color/blue_ukraine"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+        app:layout_constraintBottom_toTopOf="@+id/btnSigOut"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.751" />
+        app:layout_constraintTop_toBottomOf="@+id/btnEditProfile"
+        app:layout_constraintVertical_bias="0.31" />
 
     <Button
         android:id="@+id/btnSigOut"
@@ -51,12 +53,24 @@
         android:text="Sign out"
         android:textColor="@color/white"
         app:backgroundTint="@color/blue_ukraine"
+        app:layout_constraintBottom_toTopOf="@+id/btnPostSent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnChangePassword" />
+
+    <Button
+        android:id="@+id/btnPostSent"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Posts sent"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/blue_ukraine"
         app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.859" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSigOut" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

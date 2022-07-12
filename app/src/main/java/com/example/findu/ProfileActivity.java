@@ -1,16 +1,12 @@
 package com.example.findu;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,20 +14,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class ProfileActivity extends AppCompatActivity {
     BottomNavigationView bottomNav;
     RecyclerView profileRecyclerView;
-    Button btnSignOut;
-    Button btnEditProfile;
-    Button btnChangePassword;
+    Button btnSignOut, btnEditProfile, btnChangePassword, btnPostSent;
     TextView userName;
     TextView userEmail;
     FirebaseAuth mAuth;
@@ -56,7 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
         btnSignOut = findViewById(R.id.btnSigOut);
         btnEditProfile = findViewById(R.id.btnEditProfile);
         btnChangePassword = findViewById(R.id.btnChangePassword);
-
+        btnPostSent = findViewById(R.id.btnPostSent);
 
         if (user != null) {
             String userId = user.getUid();
@@ -72,12 +62,6 @@ public class ProfileActivity extends AppCompatActivity {
                     userEmail.setText(email);
                 }
             });
-//            for (UserInfo profile : user.getProviderData()) {
-//                name = profile.getDisplayName();
-//                email = profile.getEmail();
-//                userName.setText(name);
-//                userEmail.setText(email);
-//            }
         }
 
 
@@ -86,8 +70,6 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mAuth.signOut();
                 signOutUser();
-
-
             }
         });
 
@@ -109,6 +91,14 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        btnPostSent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProfileActivity.this, UserPosts.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
         bottomNav = findViewById(R.id.bottom_nav);
