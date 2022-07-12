@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -21,12 +26,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
     private List<Post> posts;
     private OnPostListener onPostListener;
     private Context context;
+    FirebaseFirestore db;
+    final String TAG = "Post Adapater";
+    private UserPosts activity;
 
     PostAdapter(Context context, List<Post> posts, OnPostListener onPostListener) {
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
         this.posts = posts;
         this.onPostListener = onPostListener;
+    }
+
+    PostAdapter(Context context, List<Post> posts, OnPostListener onPostListener, UserPosts activity) {
+        this.context = context;
+        this.layoutInflater = LayoutInflater.from(context);
+        this.posts = posts;
+        this.onPostListener = onPostListener;
+        this.activity = activity;
     }
 
     @NonNull
@@ -43,7 +59,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
         viewHolder.age.setText(String.valueOf(post.getAge()));
         viewHolder.note.setText(post.getNote());
         viewHolder.category.setText(post.getCategory());
-        viewHolder.gender.setText(post.getGender());
+        viewHolder.gender.setText(" "+post.getGender());
         viewHolder.setPhoto(post.getImage());
 
     }
@@ -88,5 +104,29 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
     }
     public interface OnPostListener {
         void onPostClick(int position);
+    }
+
+    public Context getContext(){
+        return activity;
+    }
+
+    public void deleteItem(int position) {
+        Post post = posts.get(position);
+        db = FirebaseFirestore.getInstance();
+        db.collection("posts").document(post.getPost_id()).delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d(TAG, "deleted");
+                            }
+                        })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "failed to delete");
+                                    }
+                                });
+        posts.remove(position);
+        notifyItemRemoved(position);
     }
 }

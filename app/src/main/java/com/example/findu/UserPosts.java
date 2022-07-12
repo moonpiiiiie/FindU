@@ -2,10 +2,12 @@ package com.example.findu;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +34,9 @@ public class UserPosts extends AppCompatActivity implements PostAdapter.OnPostLi
     private FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
     String userName;
+    String userId;
     ImageView backButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +55,7 @@ public class UserPosts extends AppCompatActivity implements PostAdapter.OnPostLi
 
 
         firebaseAuth = FirebaseAuth.getInstance();
-        String userId = firebaseAuth.getCurrentUser().getUid();
+        userId = firebaseAuth.getCurrentUser().getUid();
         db = FirebaseFirestore.getInstance();
         DocumentReference userRef = db.collection("users").document(userId);
         userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -61,15 +65,14 @@ public class UserPosts extends AppCompatActivity implements PostAdapter.OnPostLi
                 userName = user.getUsername();
             }
         });
-
         recyclerView = findViewById(R.id.recyclerView_userPost);
         userPosts = new ArrayList<>();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        postAdapter = new PostAdapter(UserPosts.this, userPosts, this);
+        postAdapter = new PostAdapter(UserPosts.this, userPosts, this, this);
         recyclerView.setAdapter(postAdapter);
         fetchPosts();
-
+        new ItemTouchHelper(itemTouchHelper).attachToRecyclerView(recyclerView);
         backButton = findViewById(R.id.imageView_backbutton_userPost);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +81,28 @@ public class UserPosts extends AppCompatActivity implements PostAdapter.OnPostLi
             }
         });
     }
+
+    ItemTouchHelper.SimpleCallback itemTouchHelper = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//            nameList.remove(viewHolder.getAdapterPosition());
+//            addressList.remove(viewHolder.getAdapterPosition());
+//            urlAdapter.notifyDataSetChanged();
+            // when swipe to right, app will pop out alertdialog to ask user if confirmed to delete
+            AlertDialog.Builder builder = new AlertDialog.Builder(UserPosts.this);
+            builder.setTitle("Delete post");
+            builder.setMessage("Are you sure you want to delete this post?");
+            builder.setPositiveButton("Confirm", (dialogInterface, i) -> postAdapter.deleteItem(viewHolder.getAdapterPosition()));
+            builder.setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> postAdapter.notifyItemChanged(viewHolder.getAdapterPosition()));
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    };
 
     private void fetchPosts() {
         CollectionReference postRef = db.collection("posts");
@@ -88,8 +113,12 @@ public class UserPosts extends AppCompatActivity implements PostAdapter.OnPostLi
                 if (task.isSuccessful()) {
                     QuerySnapshot x = task.getResult();
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        userPosts.add(document.toObject(Post.class));
-                        postAdapter.notifyDataSetChanged();
+                        Post userPost = document.toObject(Post.class);
+                        if (userPost.getUser_id().equals(userId)) {
+                            userPosts.add(document.toObject(Post.class));
+                            postAdapter.notifyDataSetChanged();
+                        }
+
 //                        Log.d(TAG, document.getId() + " => " + document.getData());
                     }
                 } else {
