@@ -110,6 +110,7 @@ public class SignUpActivity extends AppCompatActivity {
                 if (!task.isSuccessful()) {
                     Toast.makeText(SignUpActivity.this, "Sign Up Failed", Toast.LENGTH_SHORT).show();
                 } else {
+                    Toast.makeText(SignUpActivity.this, "Sign Up Successful!", Toast.LENGTH_SHORT).show();
                     Log.w("sign up activity", "createUserWithEmail:failure", task.getException());
                     userId = mAuth.getCurrentUser().getUid();
                     DocumentReference documentRef = db.collection("users").document(userId);
