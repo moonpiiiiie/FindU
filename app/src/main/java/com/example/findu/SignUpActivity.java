@@ -124,6 +124,9 @@ public class SignUpActivity extends AppCompatActivity {
                             Log.d("signupUser", "on success, userName" + userId);
                         }
                     });
+                    Intent intent = new Intent(SignUpActivity.this, EmailPasswordActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 progressBar.setVisibility(View.INVISIBLE);
             }
