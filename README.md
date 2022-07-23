@@ -79,6 +79,7 @@ We first confirmed that the final implementation matches the user experience as 
 
 
 ## Difficulties & Challenges
+![alt text](https://github.com/moonpiiiiie/FindU/wireframe.jpeg?raw=true)
 
 -  Design:
 
