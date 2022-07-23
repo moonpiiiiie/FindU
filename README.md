@@ -82,7 +82,7 @@ We first confirmed that the final implementation matches the user experience as 
 
 ## Difficulties & Challenges
 
-
+![wireframe](https://github.com/moonpiiiiie/FindU/blob/main/wireframe.jpeg?raw=true)
 -  Design:
 
 The greatest challenge during the design was to determine what data need to be collected and displayed in a single post. Undoubtedly, name, age, and gender are essential data. But what about other data such as location? If we upload automatic navigation information, then we assume the sender and the person listed on the post stay together. However, it’s not always the case. The sender should initiatively write the location which we think can be integrated into the note of a post.
