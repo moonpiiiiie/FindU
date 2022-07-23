@@ -4,6 +4,8 @@ One of the team members, Joyce's grandmother who was born in 1939 during World W
 
 ## Introduction
 
+<img src='http://g.recordit.co/4wmzAV7Q4s.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
 Checkout Demo Video @: [Youtube](https://www.youtube.com/watch?v=AN83FD_X800)
 
 FindU, an Android communication application, promises to make it easier for Ukrainians to locate friends and family while the country is at war. The following features are available in FindU:
@@ -79,7 +81,7 @@ We first confirmed that the final implementation matches the user experience as 
 
 
 ## Difficulties & Challenges
-![alt text](https://github.com/moonpiiiiie/FindU/wireframe.jpeg?raw=true)
+
 
 -  Design:
 
